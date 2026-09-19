@@ -104,7 +104,7 @@ structure Elem where
 /-- Everything about one element that both the residual and the stress recovery
     need: its unscaled stress, its four shape-function gradients, and `det J`.
 
-    Each element appears in the residual check once per node it touches — four
+    Each element appears in the residual check once per node it touches, four
     times over.  Naming this state lets the generated model bind it to a single
     constant per element, so the kernel evaluates each element once and reuses
     the result, rather than recomputing it at every incident node. -/

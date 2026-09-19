@@ -67,10 +67,10 @@ def qualTestFactor : TestApproach → ℚ
 
 /-- Proof test factor from Table 1 footnote ** (§4.2.1).
 
-    Table 1: "N/A or 1.05 — Propellant tanks and SRM cases only."
+    Table 1: "N/A or 1.05, Propellant tanks and SRM cases only."
 
     This value (1.05) applies ONLY to propellant tanks and solid rocket motor (SRM)
-    cases.  For all other metallic structures the proof test factor is N/A — no proof
+    cases.  For all other metallic structures the proof test factor is N/A, no proof
     test is required.  Using this value for general metallic structures would be an
     error; consult §4.2.1 before applying. -/
 def proofTestFactor : ℚ := 21 / 20   -- 1.05  (propellant tanks and SRM cases only)

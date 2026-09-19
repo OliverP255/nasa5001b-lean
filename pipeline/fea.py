@@ -107,8 +107,7 @@ def _mesh(step_path: Path, inp_path: Path, mesh_size_mm: float) -> None:
     """Import STEP, generate a linear C3D4 mesh, write it as ABAQUS .inp.
 
     Mesh optimisation is essential here, not cosmetic.  A constant-strain
-    tetrahedron recovers stress from a single gradient, so a sliver element —
-    one nearly flat, with a tiny Jacobian — reports a wildly wrong stress.
+    tetrahedron recovers stress from a single gradient, so a sliver element, one nearly flat, with a tiny Jacobian, reports a wildly wrong stress.
     Without optimisation, coarse meshes of this bracket put their peak stress
     on a sliver sitting at the neutral axis, where the bending stress should
     be zero.  `check_mesh_quality` guards against what optimisation misses.
@@ -277,7 +276,7 @@ def _run_ccx(inp_path: Path) -> Path:
             f"CalculiX produced no {dat.name}.\n"
             f"stdout: {result.stdout[-800:]}\nstderr: {result.stderr[-800:]}")
     if dat.stat().st_size == 0:
-        raise RuntimeError(f"CalculiX wrote an empty {dat.name} — the solve failed.")
+        raise RuntimeError(f"CalculiX wrote an empty {dat.name}, the solve failed.")
     return dat
 
 
@@ -359,7 +358,7 @@ def run_fea(step_path: Path, geom: BracketGeometry, mat: Material,
     Iterative refinement (`refine` extra solves)
     --------------------------------------------
     CalculiX prints displacements to seven significant figures, which by itself
-    leaves a residual of order 1 N — far too coarse to be a meaningful check.
+    leaves a residual of order 1 N, far too coarse to be a meaningful check.
     So we compute the exact residual `r = K u − f` and ask CalculiX to solve
     `K δ = −r`, then take `u + δ`.  Because `δ` is small, seven significant
     figures of `δ` are many more significant figures of `u`, and each pass

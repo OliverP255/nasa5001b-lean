@@ -5,11 +5,11 @@
   These results hold for ALL designs, not just one specific bracket.
   They fall into two groups:
 
-  A. CONCRETE — facts about the numeric values in Table 1.
+  A. CONCRETE, facts about the numeric values in Table 1.
      Proved by `decide +kernel` or `rfl`, so they are checked by the Lean
      kernel itself and rest on no axiom beyond the standard three.
 
-  B. GENERAL — mathematical properties of the Margin of Safety formula
+  B. GENERAL, mathematical properties of the Margin of Safety formula
      and the compliance predicate.  Proved with Mathlib tactics.
      These are the load-bearing formal results for the essay.
 
@@ -90,7 +90,7 @@ theorem margin_nonneg_iff {allowable limitStress df : ℚ}
 
     §4.2d: stronger materials are more likely to satisfy the factored stress requirement.
 
-    NOTE: `hσ` and `hdf` are mathematically required — `a/b` is monotone in `a` only when
+    NOTE: `hσ` and `hdf` are mathematically required, `a/b` is monotone in `a` only when
     `b > 0`; for `b ≤ 0` the direction reverses (or `b = 0` gives 0/0 = 0 in ℚ). -/
 theorem margin_monotone_allowable {a₁ a₂ limitStress df : ℚ}
     (hσ : 0 < limitStress) (hdf : 0 < df) (h : a₁ ≤ a₂) :
@@ -172,7 +172,7 @@ theorem compliant_of_lower_stress {s : StructuralCheck} {σ₂ : ℚ}
 -/
 
 /-- If the design is compliant at `s.σ_max`, it is compliant at any smaller
-    positive stress — stated on squares, as the FEM side produces them. -/
+    positive stress, stated on squares, as the FEM side produces them. -/
 theorem compliant_of_sq_le {s : StructuralCheck} {σ : ℚ}
     (hσ : 0 < σ) (hmax : 0 < s.σ_max)
     (hsq : σ ^ 2 ≤ s.σ_max ^ 2)

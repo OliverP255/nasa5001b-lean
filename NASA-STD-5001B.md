@@ -1,4 +1,4 @@
-# NASA-STD-5001B — Ground Truth for Formalisation
+# NASA-STD-5001B, Ground Truth for Formalisation
 
 Source: NASA-STD-5001B, *Structural Design and Test Factors of Safety for Spaceflight Hardware*, approved 08-06-2014. This file contains only the definitions and requirements we are formalising. Text is transcribed verbatim from the standard; editorial notes are marked **[Note:]**.
 
@@ -120,7 +120,7 @@ The protoflight verification approach has the advantage that a dedicated test un
 
 **Requirement (§4.2.1c).** The workmanship verification program shall be approved by the responsible Technical Authority.
 
-### Table 1 — Minimum Design and Test Factors for Metallic Structures
+### Table 1, Minimum Design and Test Factors for Metallic Structures
 
 | Verification Approach | Ultimate Design Factor | Yield Design Factor | Qualification Test Factor | Proof Test Factor |
 |-----------------------|------------------------|---------------------|---------------------------|-------------------|

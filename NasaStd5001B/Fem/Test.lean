@@ -6,7 +6,7 @@
   These matter because everything downstream is only as meaningful as the
   definition of `K`.  A certificate proving `‖K u − f‖ ≤ ε` for the *wrong* `K`
   proves nothing about the bracket, and that error would be invisible in the
-  generated file — it would still build.  So the properties a linear-elastic
+  generated file, it would still build.  So the properties a linear-elastic
   constant-strain tetrahedron must have are pinned down here, on elements
   small enough to check by hand.
 
@@ -60,7 +60,7 @@ theorem uniaxial_vm : uniaxial.elemVonMisesSq m 1 1 = 36 := by decide +kernel
 
 /-- An irregular tetrahedron.  The patch-test property of a constant-strain
     element is shape-independent, so the expected values below hold for *this*
-    element exactly as they do for the reference one — which is what makes
+    element exactly as they do for the reference one, which is what makes
     these checks sensitive to an error in the Jacobian or the gradients. -/
 def skewP (u0 u1 u2 u3 : Vec3) : Elem :=
   { p0 := ⟨0, 0, 0⟩, p1 := ⟨3, 1, 0⟩, p2 := ⟨1, 4, 1⟩, p3 := ⟨0, 2, 5⟩

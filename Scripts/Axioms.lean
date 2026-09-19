@@ -7,7 +7,7 @@
   evaluation rather than checking it, which shows up here as the axiom
   `Lean.ofReduceBool`.  An unfinished proof shows up as `sorryAx`.  Neither is
   visible from a successful `lake build`, so the pipeline runs this and fails
-  if either appears — see `BANNED_AXIOMS` in pipeline/run.py.
+  if either appears, see `BANNED_AXIOMS` in pipeline/run.py.
 
   The expected output is `[propext, Classical.choice, Quot.sound]` throughout.
 -/

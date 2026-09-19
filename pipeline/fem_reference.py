@@ -6,8 +6,8 @@ An exact-rational mirror of `NasaStd5001B/Fem/*.lean`.
 Every function here computes, in Python `Fraction` arithmetic, exactly what the
 corresponding Lean definition computes.  It has two jobs:
 
-  1. Choose the constants that go into the certificate — the residual tolerance
-     ε and the stress bounds σ_lo, σ_hi — which requires evaluating the model
+  1. Choose the constants that go into the certificate, the residual tolerance
+     ε and the stress bounds σ_lo, σ_hi, which requires evaluating the model
      before Lean does.
   2. Serve as a cross-check: the values it produces must agree with Lean's
      (verified by the pipeline) and its stresses must agree with CalculiX's own
@@ -44,7 +44,7 @@ class Lame:
 
 
 def lame_from(E: Fraction, nu: Fraction) -> Lame:
-    """λ = Eν/((1+ν)(1−2ν)),  μ = E/(2(1+ν)) — exactly."""
+    """λ = Eν/((1+ν)(1−2ν)),  μ = E/(2(1+ν)), exactly."""
     return Lame(lam=E * nu / ((1 + nu) * (1 - 2 * nu)),
                 mu=E / (2 * (1 + nu)))
 
@@ -68,7 +68,7 @@ def _dot(a: Sequence[int], b: Sequence[int]) -> int:
 
 
 # ---------------------------------------------------------------------------
-# Element kernel — mirrors Fem/Element.lean
+# Element kernel, mirrors Fem/Element.lean
 # ---------------------------------------------------------------------------
 
 def kinematics(p: Sequence[IVec3]) -> tuple[list[IVec3], int]:
@@ -136,7 +136,7 @@ def eval_element(p: Sequence[IVec3], u: Sequence[IVec3],
 
 
 # ---------------------------------------------------------------------------
-# Assembly — mirrors Fem/Assembly.lean
+# Assembly, mirrors Fem/Assembly.lean
 # ---------------------------------------------------------------------------
 
 @dataclass
@@ -243,7 +243,7 @@ def check_against_solver(model: DiscreteModel,
     """Relative difference between our peak von Mises and the solver's.
 
     A large value means the Lean element formulation and CalculiX disagree
-    about what the discrete model *is* — a modelling bug, not a solver error.
+    about what the discrete model *is*, a modelling bug, not a solver error.
     """
     q = max_von_mises_sq(model, evals)
     ours = math.sqrt(float(q))

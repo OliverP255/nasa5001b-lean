@@ -20,9 +20,9 @@ import build123d as bd
 @dataclass(frozen=True)
 class BracketGeometry:
     """Cross-section and length of the cantilever bracket (all in mm)."""
-    width:  Fraction   # b  — cross-section width
-    height: Fraction   # h  — cross-section height (in bending direction)
-    length: Fraction   # L  — cantilever length
+    width:  Fraction   # b, cross-section width
+    height: Fraction   # h, cross-section height (in bending direction)
+    length: Fraction   # L, cantilever length
 
 
 @dataclass(frozen=True)
@@ -37,7 +37,7 @@ class Material:
     `Fty`/`Ftu` are the material allowables of §4.2d.  NOTE: §4.2c requires
     allowables derived per NASA-STD-6016 (MMPDS).  The values below are
     typical handbook properties for the alloy and are an *assumed input* to
-    the certificate — see the trusted-inputs table in the README.
+    the certificate, see the trusted-inputs table in the README.
     """
     name:    str
     E:       Fraction  # Young's modulus (MPa)

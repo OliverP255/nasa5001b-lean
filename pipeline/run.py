@@ -45,7 +45,7 @@ AXIOM_LEAN = REPO_ROOT / "Scripts" / "Axioms.lean"
 #: roughly linearly with element count: ~680 elements check in about two
 #: minutes, ~1150 in about three and a half.  The certificate is a statement
 #: about whichever discrete model it is given, so a coarser mesh does not make
-#: it less true — it makes it a claim about a cruder model, and widens the gap
+#: it less true, it makes it a claim about a cruder model, and widens the gap
 #: to beam theory that each certificate reports.
 DEFAULT_MESH_SIZE_MM = 10.0
 
@@ -63,7 +63,7 @@ def _lake() -> str | None:
 def _run_lake(args: list[str]) -> subprocess.CompletedProcess:
     lake = _lake()
     if lake is None:
-        raise RuntimeError("'lake' not found — add ~/.elan/bin to PATH")
+        raise RuntimeError("'lake' not found, add ~/.elan/bin to PATH")
     return subprocess.run([lake] + args, cwd=REPO_ROOT, capture_output=True, text=True)
 
 
@@ -139,7 +139,7 @@ def run(limit_load_n: Fraction, approach: str, mesh_size_mm: float,
         print("[4/5] Checking the proof (lake build) ...")
         built = _run_lake(["build"])
         if built.returncode != 0:
-            print("  ERROR: lake build FAILED — the certificate does not hold.")
+            print("  ERROR: lake build FAILED, the certificate does not hold.")
             print((built.stdout + built.stderr)[-3000:])
             return 1
         print("      lake build: OK")
