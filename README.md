@@ -1,103 +1,64 @@
 # Formally Verified Structural Compliance: NASA-STD-5001B in Lean 4
 
-A proof-of-concept that connects a real FEA pipeline to a Lean 4 compliance certificate, formalising the structural design factors of safety from NASA-STD-5001B ("Structural Design and Test Factors of Safety for Spaceflight Hardware", 2014).
+A pipeline that takes a CAD part and a limit load and produces a Lean 4 certificate that the part does, or does not, satisfy the strength requirement of NASA-STD-5001B. Both the FEA simulation's computations and the safety-test computations are checked in Lean.
 
-```
-build123d CAD  →  Gmsh mesh  →  CalculiX FEA  →  Lean 4 certificate
-      STEP           C3D4              σ_max          lake build ✓
-```
+<p align="center">
+  <img src="pipeline.svg" alt="Pipeline: CAD model → mesh → FEA simulation → structural analysis" width="650">
+</p>
 
-## What it does
-
-The pipeline takes a cantilever bracket under a user-specified limit load and produces a machine-checked proof that the design either complies or does not comply with §4.2d of NASA-STD-5001B.
-
-```
-$ python3 -m pipeline                      # 800 N limit load, protoflight
-$ python3 -m pipeline --limit-load 2000    # overloaded bracket
-$ python3 -m pipeline --approach prototype
-```
-
-On each run:
-1. **CAD** — `build123d` constructs a 25×12×150 mm rectangular cantilever and exports STEP.
-2. **Mesh** — Gmsh generates a linear tetrahedral (C3D4) mesh.
-3. **FEA** — CalculiX solves the static problem; max von Mises stress is extracted.
-4. **Conservative bound** — the float result is rounded *up* to the nearest 0.001 MPa (`Fraction(ceil(σ × 1000), 1000)`), so the formal proof is conservative.
-5. **Lean certificate** — `NasaStd5001B/Generated/Bracket.lean` is written with the exact rational stress value and either `bracket_compliant` or `bracket_noncompliant` as a theorem.
-6. **`lake build`** — Lean's type-checker machine-checks the proof. Exit code 0 = compliant, 1 = non-compliant.
-
-## Lean modules
-
-| File | Contents |
-|------|----------|
-| `NasaStd5001B/Defs.lean` | §3.2 MS formula, §4.2.1 Table 1 factors, §4.2d compliance predicate (~100 lines) |
-| `NasaStd5001B/Meta.lean` | 14 theorems about the standard: 7 concrete (Table 1 values) + 7 general (monotonicity, antitone, core correctness) (~150 lines) |
-| `NasaStd5001B/Generated/Bracket.lean` | Auto-generated per run; concrete compliance or noncompliance proof (~55 lines) |
-
-All numeric factors are exact rationals (ℚ): 1.4 = 7/5, 1.25 = 5/4, 1.2 = 6/5, 1.05 = 21/20. Decidable ℚ arithmetic means all concrete proofs close by `native_decide`.
-
-### Key theorem
-
-```lean
--- Core correctness theorem: the MS formula faithfully implements §4.2d
-theorem margin_nonneg_iff {allowable limitStress df : ℚ}
-    (hσ : 0 < limitStress) (hdf : 0 < df) :
-    0 ≤ marginOfSafety allowable limitStress df ↔ limitStress * df ≤ allowable
-```
-
-### Trust boundary
-
-Lean verifies the arithmetic given `σ_max`. Correctness of the FEA model (mesh quality, boundary conditions, solver convergence) is established separately by comparison with beam theory σ = 6FL/bh² — the pipeline checks that FEA and beam theory agree within 30%.
-
-## Dependencies
-
-### Lean
-
-- [Lean 4](https://leanprover.github.io/) via [elan](https://github.com/leanprover/elan) — version pinned in `lean-toolchain`
-- [Mathlib4](https://github.com/leanprover-community/mathlib4)
-
-```bash
-curl https://elan.lean-lang.org/elan-init.sh -sSf | sh
-lake exe cache get   # downloads prebuilt Mathlib oleans (~5 min)
-lake build
-```
-
-### Python
-
-- [build123d](https://github.com/gumyr/build123d) — parametric CAD
-- [gmsh](https://gmsh.info/) — meshing (`pip install gmsh`)
-- [CalculiX](https://www.dhondt.de/) — FEA solver (bundled with [FreeCAD](https://www.freecad.org/), or install separately)
-
-```bash
-pip install build123d gmsh
-# CalculiX: set CCX_PATH if not at /Applications/FreeCAD.app/Contents/Resources/bin/ccx
-```
-
-## NASA-STD-5001B
-
-NASA-STD-5001B is a public-domain US government document. Download it free from [standards.nasa.gov](https://standards.nasa.gov). The `NASA-STD-5001B.md` file in this repo contains verbatim excerpts of the sections being formalised, as a ground-truth reference.
-
-## Structure
-
-```
-lean-with-sims/
-  lakefile.lean              # Lake project config + Mathlib dependency
-  lean-toolchain             # Lean version pin
-  NasaStd5001B.lean          # Root import
-  NasaStd5001B/
-    Defs.lean                # The standard encoded
-    Meta.lean                # Properties of the standard
-    Generated/
-      Bracket.lean           # Pipeline output (re-generated on each run)
-  pipeline/
-    cad_model.py             # build123d bracket geometry
-    fea.py                   # Gmsh + CalculiX + von Mises extraction
-    generate_lean.py         # FEA results → Lean source
-    run.py                   # Orchestrator
-  NASA-STD-5001B.md          # Ground-truth quotes from the standard
-```
 
 ## Background
 
-This project is part of ongoing research into formalising engineering standards and integrating proof assistants with physical simulation tools. The approach is described in an accompanying essay (forthcoming).
+NASA's standards set the expectations for how the aerospace industry must design, test and manufacture hardware.
 
-The sibling project [`cadcontracts`](https://github.com/oliverpryce/cadcontracts) implements Westman & Nyberg's assume-guarantee contract theory for CAD/simulation pipelines. This project provides the formally verified compliance leaf that plugs into that framework.
+NASA-STD-5001B is NASA's standard for structural design, testing, and service-life requirements for aerospace hardware. It tells us the minimum loads (in terms of design factors and test factors) that parts must withstand to be considered valid.
+
+For example, we might perform a structural analysis of a protoflight nose cone. Protoflight means we intend to use it in flight after the test. Among other things, the standard tells us to test for yield at a load of 1.25× the expected maximum load that will be experienced during flight.
+
+## Why formalise it?
+
+Formalising an engineering standard gives three things:
+
+- **No ambiguity.** The same clauses can be re-implemented throughout a project, organisation, and tools. NASA's standards are used throughout the aerospace industry.
+- **Requirements compose.** NASA often has hundreds of engineers working on the same project. They don't all speak to each other and they need to balance their separate design requirements. Formalisation provides a ground truth for those requirements.
+- **An explicit boundary of assurance.** Formalisation forces us to specify the boundary of what is proved and what is assumed.
+
+I've formalised the structural analysis tests as in NASA-STD-5001B and verified the correctness of the FEA computation. This is just one part of a much larger system, and so there are still untrusted inputs — e.g. the mesh, boundary conditions and material model still need to be verified and validated.
+
+What formalisation does is make the boundary between what is assumed and what is verified explicit.
+
+## Project
+
+### 1. The NASA standard
+
+I formalised the structural analysis tests in NASA-STD-5001B. The project focuses on §3.2 (Margin of Safety), Table 1 (§4.2.1, minimum design and test factors), and §4.2d:
+
+> "The factored stresses shall not exceed material allowable stresses (yield and ultimate) under the expected temperature, pressure, and other operating conditions."
+
+`NasaStd5001B/Meta.lean` proves properties of the standard itself, including its main correctness theorem:
+
+```
+MS ≥ 0  ⟺  factored stress ≤ allowable
+```
+
+We also show, for example, that the margin of safety is monotonic — lower stress or a stronger material never results in a lower margin of safety, and a larger design factor never results in a higher one.
+
+### 2. The computation
+
+The stress used in the structural analysis comes from a finite-element analysis (FEA) simulation. The exact physics solver we use is untrusted — the engine might change. We formally verify the correctness of the stress computation that is performed.
+
+Lean assembles the stiffness system `Ku = f` in exact rational arithmetic. The solver (CalculiX) then proposes a solution `u`, and Lean proves that `u` satisfies the system Lean assembled, to within a tolerance ε. From that verified `u`, Lean computes the stress in every element and takes the maximum. That maximum is the value passed into the structural analysis tests.
+
+By doing this, we split the inputs to the system into the trusted parts (the FEA computation and the structural analysis) and the untrusted parts (everything else — mesh quality, discretisation error, etc.).
+
+## What's next
+
+This is just one part of a much larger system, and so there are still untrusted inputs: the mesh, boundary conditions and material model still need to be verified and validated. This is what the full process would look like:
+
+1. **Formalise the standard and the certified computation** — what this repo is building.
+2. **Formalise the meshing process.**
+3. **Verify the bound on the error in the FEM output.** There is still an unformalised error between the FEA simulation and reality — the simulation uses a discretised approximation of the real design, and we should make that error formal.
+4. **Formalise the design model.** A compositional formal language for the geometry and tolerances of a part, so that e.g. "detrimental yielding" (§3.2) can be decided against the part's own GD&T rather than asserted. I've already worked on formalising the tolerancing half in my own repo, `formal-gdt`.
+
+I've written a short essay discussing this approach at greater length (forthcoming).
+
