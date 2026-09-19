@@ -1,11 +1,8 @@
-# Formally Verified Structural Compliance: NASA-STD-5001B in Lean 4
+# NASA-STD-5001B in Lean 4
 
 A pipeline that takes a CAD part and a limit load and produces a Lean 4 certificate that the part does, or does not, satisfy the strength requirement of NASA-STD-5001B. Both the FEA simulation's computations and the safety-test computations are checked in Lean.
 
-<p align="center">
-  <img src="pipeline.svg" alt="Pipeline: CAD model → mesh → FEA simulation → structural analysis" width="650">
-</p>
-
+![Pipeline: CAD model → mesh → FEA simulation → structural analysis](pipeline.svg)
 
 ## Background
 
@@ -13,7 +10,7 @@ NASA's standards set the expectations for how the aerospace industry must design
 
 NASA-STD-5001B is NASA's standard for structural design, testing, and service-life requirements for aerospace hardware. It tells us the minimum loads (in terms of design factors and test factors) that parts must withstand to be considered valid.
 
-For example, we might perform a structural analysis of a protoflight nose cone. Protoflight means we intend to use it in flight after the test. Among other things, the standard tells us to test for yield at a load of 1.25× the expected maximum load that will be experienced during flight.
+For example, we might perform a structural analysis of a protoflight nose cone. Protoflight means we intend to use it in flight after the test. Among other things, the standard tells us to test for yield at a load of $1.25\times$ the expected maximum load that will be experienced during flight.
 
 ## Why formalise it?
 
@@ -37,9 +34,9 @@ I formalised the structural analysis tests in NASA-STD-5001B. The project focuse
 
 `NasaStd5001B/Meta.lean` proves properties of the standard itself, including its main correctness theorem:
 
-```
-MS ≥ 0  ⟺  factored stress ≤ allowable
-```
+$$
+MS \geq 0 \iff \sigma_{\text{factored}} \leq \sigma_{\text{allowable}}
+$$
 
 We also show, for example, that the margin of safety is monotonic — lower stress or a stronger material never results in a lower margin of safety, and a larger design factor never results in a higher one.
 
@@ -47,7 +44,7 @@ We also show, for example, that the margin of safety is monotonic — lower stre
 
 The stress used in the structural analysis comes from a finite-element analysis (FEA) simulation. The exact physics solver we use is untrusted — the engine might change. We formally verify the correctness of the stress computation that is performed.
 
-Lean assembles the stiffness system `Ku = f` in exact rational arithmetic. The solver (CalculiX) then proposes a solution `u`, and Lean proves that `u` satisfies the system Lean assembled, to within a tolerance ε. From that verified `u`, Lean computes the stress in every element and takes the maximum. That maximum is the value passed into the structural analysis tests.
+Lean assembles the stiffness system $K u = f$ in exact rational arithmetic. The solver (CalculiX) then proposes a solution $u$, and Lean proves that $u$ satisfies the system Lean assembled, to within a tolerance $\varepsilon$. From that verified $u$, Lean computes the stress in every element and takes the maximum. That maximum is the value passed into the structural analysis tests.
 
 By doing this, we split the inputs to the system into the trusted parts (the FEA computation and the structural analysis) and the untrusted parts (everything else — mesh quality, discretisation error, etc.).
 
@@ -61,4 +58,3 @@ This is just one part of a much larger system, and so there are still untrusted 
 4. **Formalise the design model.** A compositional formal language for the geometry and tolerances of a part, so that e.g. "detrimental yielding" (§3.2) can be decided against the part's own GD&T rather than asserted. I've already worked on formalising the tolerancing half in my own repo, `formal-gdt`.
 
 I've written a short essay discussing this approach at greater length (forthcoming).
-
