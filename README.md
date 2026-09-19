@@ -1,62 +1,64 @@
 # NASA-STD-5001B in Lean 4
 
-A pipeline that takes a CAD part and a limit load and produces a Lean 4 certificate that the part does, or does not, satisfy the strength requirement of NASA-STD-5001B. Both the FEA physics simulation and the safety-test computations are checked in Lean.
+A pipeline that takes a CAD part and a limit load and produces a Lean 4 certificate that the part does, or does not, satisfy the strength requirements of NASA-STD-5001B. Both the FEA physics simulation and the safety-test computations are checked in Lean.
 
 ![Pipeline: CAD model → mesh → FEA simulation → structural analysis](pipeline.svg)
 
 ## Background
 
-NASA's standards set the expectations for how the aerospace industry must design, test and manufacture hardware.
+NASA's standards set the expectations for how the aerospace industry design, test and manufacture hardware.
 
-NASA-STD-5001B is NASA's standard for structural design, testing, and service-life requirements for spaceflight hardware. It tells us the minimum loads (in terms of design factors and test factors) that parts must withstand to be considered valid.
+NASA-STD-5001B in particular is NASA's standard for structural design, testing, and service-life requirements. It tells us the minimum loads (in terms of design factors and test factors) that parts must withstand to be considered valid.
 
-For example, we might perform a structural analysis of a protoflight nose cone. Protoflight means we intend to use it in flight after the test. Among other things, the standard tells us to demonstrate a margin of safety where the design doesn't yield at a load of $1.25\times$ the expected maximum load that will be experienced during flight.
+For example, we might perform a structural analysis of a protoflight nose cone. Protoflight means we intend to use it in flight after the test. Among other things, the standard tells us to demonstrate that the design doesn't yield at a load of $1.25\times$ the expected maximum load that will be experienced during flight.
 
 ## Why formalise it?
 
 Formalising an engineering standard gives three things:
 
-- **It removes ambiguity.** The same clauses can be re-implemented throughout a project, organisation, and tools. NASA's standards are used throughout the aerospace industry.
+- **It removes ambiguity.** The same standards can be re-implemented throughout a project, organisation and across many different tools. NASA's standards are used throughout the aerospace industry.
 - **Requirements compose.** NASA often has hundreds of engineers working on the same project. They don't all speak to each other and they need to balance their separate design requirements. Formalisation provides a ground truth for those requirements.
 - **It makes our informal assumptions explicit.** Formalisation forces us to specify the boundary of what is proved and what is assumed.
 
-I've formalised the structural analysis tests as in NASA-STD-5001B and verified the correctness of the FEA computation. This is just one part of a much larger system, and so there are still untrusted inputs: e.g. the mesh, boundary conditions and material model still need to be verified and validated.
+I've formalised the structural analysis tests as in NASA-STD-5001B and verified the correctness of the FEA computation. This is just one part of a much larger system. There are still untrusted (unformalised) inputs e.g. the meshing process and the material model still need to be verified and validated.
 
 What formalisation does is make the boundary between what is assumed and what is verified explicit.
 
 ## Project
 
 
-
 ### 1. The NASA standard
 
-I formalised the structural analysis tests in NASA-STD-5001B. The project focuses on §3.2 (Margin of Safety), Table 1 (minimum design and test factors), and §4.2d:
+I formalised the structural analysis tests in NASA-STD-5001B. This repo focuses on §3.2, Table 1, and §4.2d:
 
 > "The factored stresses shall not exceed material allowable stresses (yield and ultimate) under the expected temperature, pressure, and other operating conditions."
 
-`NasaStd5001B/Meta.lean` proves properties of the standard itself, including its main correctness theorem:
+`NasaStd5001B/Meta.lean` proves properties of the standard itself, including the main theorem about the correctness of the requirements:
 
 $$
 MS \geq 0 \iff \sigma_{\text{factored}} \leq \sigma_{\text{allowable}}
 $$
 
-We also show, for example, that the margin of safety is monotonic: lower stress or a stronger material never results in a lower margin of safety, and a larger design factor never results in a higher one.
+We also show, for example, that the margin of safety is monotonic since lower stress or a stronger material never results in a lower margin of safety.
 
 ### 2. The computation
 
-The stress used in the structural analysis comes from a finite-element analysis (FEA) simulation. The exact physics solver we use is untrusted: the engine might change. We formally verify the correctness of the stress computation that is performed.
+The stress used in the structural analysis comes from a finite-element analysis (FEA) simulation. The physics solver in the pipeline is untrusted because the exact physics solver might change. So, we formally verify the correctness of the stress computation that is performed.
 
 Lean assembles the stiffness system $K u = f$ in exact rational arithmetic. The solver (CalculiX) then proposes a solution $u$, and Lean proves that $u$ satisfies the system Lean assembled, to within a tolerance $\varepsilon$. From that verified $u$, Lean computes the stress in every element and takes the maximum. That maximum is the value passed into the structural analysis tests.
 
-By doing this, we split the inputs to the system into the trusted parts (the FEA computation and the structural analysis) and the untrusted parts (everything else: mesh quality, discretisation error, etc.).
+By doing this, we split the inputs to the system into the trusted parts (the FEA computation and the structural analysis tests) and the untrusted parts (everything else: mesh quality, material models, etc.).
 
-## What's next
+## In context
 
-This is just one part of a much larger system, and so there are still untrusted inputs: the mesh, boundary conditions and material model still need to be verified and validated. This is what the full process would look like:
+This is just one part of a much larger system, and there are still untrusted inputs: the mesh, boundary conditions and material model still need to be verified and validated. 
 
-1. **Formalise the standard and the certified computation**: what this repo is building.
-2. **Formalise the meshing process.**
-3. **Verify the bound on the error in the FEM output.** There is still an unformalised error between the FEA simulation and reality: the simulation uses a discretised approximation of the real design, and we should make that error formal.
-4. **Formalise the design model.** A compositional formal language for the geometry and tolerances of a part, so that e.g. "detrimental yielding" (§4.2e) can be decided against the part's own GD&T rather than asserted. I've already worked on formalising the tolerancing half in my own repo, `formal-gdt`.
+The full system would require the following:
 
-I've written a short essay discussing this approach at greater length (forthcoming).
+- Formalise the structural analysis tests as in NASA-STD-5001B. - this is what's in the repo.
+
+- Formalise meshing - make the geometric error between the true design and meshed design explicit
+
+- Formalise the CAD model. - We would formalise the geometric dimensioning and tolerancing (GD&T) of the CAD model. If we do that, definitions from the standard such as "detrimental yielding" (as in §3.2) can be made rigorous. I have already worked on formalising tolerancing in my own repo [formal-gdt](https://github.com/OliverP255/formal-gdt).
+
+I’ve written [a short essay](https://www.oliverpryce.xyz/what-happens-when-design-becomes-automated/), discussing this approach at greater length.
