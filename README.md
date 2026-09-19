@@ -26,7 +26,7 @@ I've formalised the structural analysis tests as in NASA-STD-5001B and verified 
 ## Project
 
 
-### 1. The NASA standard
+### 1. Formalising NASA-STD-5001B
 
 I formalised the structural analysis tests in NASA-STD-5001B. This repo focuses on §3.2, Table 1, and §4.2d:
 
@@ -40,7 +40,7 @@ $$
 
 We also show, for example, that the margin of safety is monotonic since lower stress or a stronger material never results in a lower margin of safety.
 
-### 2. The computation
+### 2. Formalising FEA Simulation
 
 The stress used in the structural analysis comes from a finite-element analysis (FEA) simulation. The physics solver in the pipeline is untrusted because the exact physics solver might change. So, we formally verify the correctness of the stress computation that is performed.
 
