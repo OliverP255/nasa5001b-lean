@@ -51,7 +51,7 @@ By doing this, we split the inputs to the system into the trusted parts (the FEA
 
 ## In context
 
-This is just one part of a much larger system, and there are still untrusted inputs: the mesh, boundary conditions and material model still need to be verified and validated. 
+This is just one part of a much larger system, and there are still untrusted inputs: the mesh, boundary conditions and material model still need to be verified. 
 
 The full system would need to do the following:
 
