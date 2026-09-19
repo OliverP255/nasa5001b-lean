@@ -36,11 +36,7 @@ I formalised the structural analysis tests in NASA-STD-5001B. This repo focuses 
 
 `NasaStd5001B/Meta.lean` proves properties of the standard itself, including the main theorem about the correctness of the requirements:
 
-$$
-
-MS \geq 0 \iff \sigma_{\text{factored}} \leq \sigma_{\text{allowable}}
-
-$$
+$$MS \geq 0 \iff \sigma_{\text{factored}} \leq \sigma_{\text{allowable}}$$
 
 We also show, for example, that the margin of safety is monotonic since lower stress or a stronger material never results in a lower margin of safety.
 
