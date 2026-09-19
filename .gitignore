@@ -1,0 +1,28 @@
+# Lean / Lake build artifacts
+.lake/
+*.olean
+*.ilean
+*.c
+*.o
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+
+# Claude Code local settings (project-specific permissions)
+.claude/
+
+# The NASA-STD-5001B PDF is a public-domain US government document.
+# Download it free from standards.nasa.gov — too large for git.
+*.pdf
+
+# macOS
+.DS_Store
