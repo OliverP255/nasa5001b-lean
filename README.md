@@ -8,7 +8,7 @@ A pipeline that takes a CAD part and a limit load and produces a Lean 4 certific
 
 NASA's standards set the expectations for how the aerospace industry design, test and manufacture hardware.
 
-NASA-STD-5001B in particular is NASA's standard for structural design, testing, and service-life requirements. It tells us the minimum loads (in terms of design factors and test factors) that parts must withstand to be considered valid.
+NASA-STD-5001B in particular is NASA's standard for structural design, testing, and service-life requirements. It tells us the minimum loads (in terms of design factors and test factors) that parts must withstand to be adequate.
 
 For example, we might perform a structural analysis of a protoflight nose cone. Protoflight means we intend to use it in flight after the test. Among other things, the standard tells us to demonstrate that the design doesn't yield at a load of $1.25\times$ the expected maximum load that will be experienced during flight.
 
