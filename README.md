@@ -22,7 +22,6 @@ Formalising an engineering standard gives three things:
 
 I've formalised the structural analysis tests as in NASA-STD-5001B and verified the correctness of the FEA computation. This is just one part of a much larger system. There are still untrusted (unformalised) inputs e.g. the meshing process and the material model still need to be verified and validated.
 
-What formalisation does is make the boundary between what is assumed and what is verified explicit.
 
 ## Project
 
