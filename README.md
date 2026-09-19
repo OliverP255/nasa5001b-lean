@@ -3,7 +3,6 @@
 A pipeline that takes a CAD part and a limit load and produces a Lean 4 certificate that the part does, or does not, satisfy the strength requirements of NASA-STD-5001B. Both the FEA physics simulation and the safety-test computations are checked in Lean.
 
 ![Pipeline: CAD model → mesh → FEA simulation → structural analysis](pipeline.svg)
-This project formalises this pipeline.
 
 ## Background
 
