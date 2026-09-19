@@ -53,9 +53,7 @@ By doing this, we split the inputs to the system into the trusted parts (the FEA
 
 This is just one part of a much larger system, and there are still untrusted inputs: the mesh, boundary conditions and material model still need to be verified and validated. 
 
-The full system would require the following:
-
-- Formalise the structural analysis tests as in NASA-STD-5001B. - this is what's in the repo.
+The full system would need the following inputs to be verified:
 
 - Formalise meshing - make the geometric error between the true design and meshed design explicit
 
