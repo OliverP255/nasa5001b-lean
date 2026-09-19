@@ -50,12 +50,9 @@ By doing this, we split the inputs to the system into the trusted parts (the FEA
 
 ## In context
 
-This is just one part of a much larger system, and there are still untrusted inputs: the mesh, boundary conditions and material model still need to be verified. 
+This repo is part of a larger aim to make engineering compliance machine-checkable by formalising engineering standards and tools in Lean 4.
+To make this possible, the next steps are to formally verify the inputs to the system as best as we can. That means verifying the 3D design, meshing process, the boundary conditions and material model. 
 
-The full system would need to do the following:
+Verifying the 3D design means formalising the geometric dimensioning and tolerancing (GD&T) of the CAD model. If we do that, definitions from the standard such as "detrimental yielding" (as in §3.2) can be made rigorous. I have already worked on formalising tolerancing in my own repo [formal-gdt](https://github.com/OliverP255/formal-gdt).
 
-- Formalise meshing - make the geometric error between the true design and meshed design explicit
-
-- Formalise the CAD model. - We would formalise the geometric dimensioning and tolerancing (GD&T) of the CAD model. If we do that, definitions from the standard such as "detrimental yielding" (as in §3.2) can be made rigorous. I have already worked on formalising tolerancing in my own repo [formal-gdt](https://github.com/OliverP255/formal-gdt).
-
-I’ve written [a short essay](https://www.oliverpryce.xyz/what-happens-when-design-becomes-automated/), discussing this approach at greater length.
+Complementary to this aim, I’ve written [a short essay](https://www.oliverpryce.xyz/what-happens-when-design-becomes-automated/), discussing what a formal approach to design would look like. 
