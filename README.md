@@ -42,7 +42,7 @@ We also show, for example, that the margin of safety is monotonic since lower st
 
 ### 2. Formalising FEA Simulation
 
-The stress used in the structural analysis comes from a finite-element analysis (FEA) simulation. The physics solver in the pipeline is untrusted because the exact software used by the engineer will vary. So instead of formally verifying the simulation engine, we formally check the correctness of the stress computation that is performed.
+The stress used in the structural analysis comes from a finite-element analysis (FEA) simulation. The physics solver in the pipeline is untrusted because the exact software used by the engineer will vary (we cannot formally verify every simulation engine). So instead, we formally check the correctness of the stress computation that is performed.
 
 Lean assembles the stiffness system $K u = f$ in exact rational arithmetic. The solver (CalculiX) then proposes a solution $u$, and Lean proves that $u$ satisfies the system Lean assembled, to within a tolerance $\varepsilon$. From that verified $u$, Lean computes the stress in every element and takes the maximum. That maximum is the value passed into the structural analysis tests.
 
