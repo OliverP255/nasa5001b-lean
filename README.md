@@ -53,7 +53,7 @@ By doing this, we split the inputs to the system into the trusted parts (the FEA
 
 This is just one part of a much larger system, and there are still untrusted inputs: the mesh, boundary conditions and material model still need to be verified and validated. 
 
-The full system would need the following inputs to be verified:
+The full system would need to do the following:
 
 - Formalise meshing - make the geometric error between the true design and meshed design explicit
 
