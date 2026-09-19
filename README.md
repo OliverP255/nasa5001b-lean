@@ -55,4 +55,4 @@ To make this possible, the next steps are to formally verify the inputs to the s
 
 Verifying the 3D design means formalising the geometric dimensioning and tolerancing (GD&T) of the CAD model. If we do that, definitions from the standard such as "detrimental yielding" (as in §3.2) can be made rigorous. I have already worked on formalising tolerancing in my own repo [formal-gdt](https://github.com/OliverP255/formal-gdt).
 
-Complementary to this aim, I’ve written [a short essay](https://www.oliverpryce.xyz/what-happens-when-design-becomes-automated/), discussing what a formal approach to design would look like. 
+Complementary to this aim, I’ve written [a short essay](https://www.oliverpryce.xyz/what-happens-when-design-becomes-automated/), discussing what this formal approach to design would look like. 
