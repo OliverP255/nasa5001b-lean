@@ -145,9 +145,13 @@ $$\text{Ultimate Design Load} = \text{Limit Load} \times \text{Ultimate Design F
 
 $$\text{Yield Design Load} = \text{Limit Load} \times \text{Yield Design Factor}$$
 
-**Structural Adequacy** (from §4.2d combined with §3.2 Margin of Safety):
+**Strength Requirement** (from §4.2d combined with §3.2 Margin of Safety):
 
-A structure is adequate if and only if the Margin of Safety is non-negative for both yield and ultimate failure modes. That is:
+§4.2d is satisfied exactly when the Margin of Safety is non-negative for both yield and ultimate failure modes.
+
+**[Note:** this is a *necessary* condition for structural adequacy, not a sufficient one. A structure that satisfies §4.2d may still fail to be adequate under §4.2a–c and §4.2e, under the stability and detrimental-yielding requirements, or under the test requirements of §4.1. Only §4.2d is formalised here; the rest are assumptions. Do not read the theorems below as saying a design "is adequate".**]**
+
+That is:
 
 $$\text{MS}_\text{yield} \geq 0 \quad \text{and} \quad \text{MS}_\text{ultimate} \geq 0$$
 

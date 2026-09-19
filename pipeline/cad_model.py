@@ -27,19 +27,30 @@ class BracketGeometry:
 
 @dataclass(frozen=True)
 class Material:
-    """Linear-elastic isotropic material properties."""
+    """Linear-elastic isotropic material properties.
+
+    `E` and `nu` are exact rationals, not floats: they define the stiffness
+    matrix that Lean assembles, so they have to be the same numbers on both
+    sides of the pipeline.  They are converted to decimal only when writing
+    the solver's input deck.
+
+    `Fty`/`Ftu` are the material allowables of §4.2d.  NOTE: §4.2c requires
+    allowables derived per NASA-STD-6016 (MMPDS).  The values below are
+    typical handbook properties for the alloy and are an *assumed input* to
+    the certificate — see the trusted-inputs table in the README.
+    """
     name:    str
-    E:       float     # Young's modulus (MPa)
-    nu:      float     # Poisson's ratio
-    Fty:     Fraction  # Yield allowable (MPa)  — exact integer for std alloys
-    Ftu:     Fraction  # Ultimate allowable (MPa) — exact integer for std alloys
+    E:       Fraction  # Young's modulus (MPa)
+    nu:      Fraction  # Poisson's ratio
+    Fty:     Fraction  # Yield allowable (MPa)
+    Ftu:     Fraction  # Ultimate allowable (MPa)
 
 
 # Standard material database
 AL_6061_T6 = Material(
     name="Al_6061-T6",
-    E=68_900.0,
-    nu=0.33,
+    E=Fraction(68_900),
+    nu=Fraction(33, 100),
     Fty=Fraction(276),
     Ftu=Fraction(310),
 )

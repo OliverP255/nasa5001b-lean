@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  proofs:
+    name: Lean proofs and axiom audit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install elan
+        run: |
+          curl -sSfL https://elan.lean-lang.org/elan-init.sh | sh -s -- -y --default-toolchain none
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+
+      - name: Fetch prebuilt Mathlib
+        run: lake exe cache get
+
+      - name: Build
+        run: lake build
+
+      # A certificate closed by `native_decide` type-checks but asks the kernel
+      # to trust the compiler, and `sorry` type-checks but proves nothing.
+      # Neither is visible from a successful build, so check for both directly.
+      - name: Reject native_decide and sorry
+        run: |
+          if grep -rn --include='*.lean' -E '\bnative_decide\b|\bsorry\b' NasaStd5001B Scripts; then
+            echo "::error::found native_decide or sorry in the proof sources"
+            exit 1
+          fi
+
+      - name: Audit axioms
+        run: |
+          lake env lean Scripts/Axioms.lean | tee axioms.txt
+          if grep -E 'ofReduceBool|ofReduceNat|sorryAx' axioms.txt; then
+            echo "::error::a certificate depends on a banned axiom"
+            exit 1
+          fi
+          test -s axioms.txt
+
+  reference:
+    name: Exact FEM reference tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: pip install pytest
+      # These need no CAD or solver: they check the exact-rational element
+      # formulation that the Lean definitions mirror.
+      - run: python -m pytest tests/ -v
