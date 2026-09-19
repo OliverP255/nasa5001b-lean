@@ -18,7 +18,7 @@ Formalising an engineering standard gives three things:
 
 - **It removes ambiguity.** The same clauses can be re-implemented throughout a project, organisation, and tools. NASA's standards are used throughout the aerospace industry.
 - **Requirements compose.** NASA often has hundreds of engineers working on the same project. They don't all speak to each other and they need to balance their separate design requirements. Formalisation provides a ground truth for those requirements.
-- **It makes the "formalisation boundary" explicit.** Formalisation forces us to specify the boundary of what is proved and what is assumed.
+- **It makes our informal assumptions explicit.** Formalisation forces us to specify the boundary of what is proved and what is assumed.
 
 I've formalised the structural analysis tests as in NASA-STD-5001B and verified the correctness of the FEA computation. This is just one part of a much larger system, and so there are still untrusted inputs: e.g. the mesh, boundary conditions and material model still need to be verified and validated.
 
