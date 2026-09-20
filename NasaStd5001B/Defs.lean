@@ -1,16 +1,12 @@
 /-
-  NasaStd5001B.Defs
-  Formalisation of NASA-STD-5001B, "Structural Design and Test Factors of Safety
-  for Spaceflight Hardware", approved 08-06-2014.
-
-  This module encodes:
+  This module formalises:
     · §3.2  Definitions (Margin of Safety formula)
     · §4.2.1 Table 1  Minimum Design and Test Factors for Metallic Structures
     · §4.2d  Compliance criterion: factored stress ≤ allowable
 
-  All numeric factors are represented as exact rationals (ℚ).
+  All factors are represented as exact rationals (ℚ).
 
-  Ground truth: NASA-STD-5001B.md in this repository.
+  Md file of quoted definitions is used as ground truth 
 -/
 
 import Mathlib.Data.Rat.Lemmas
