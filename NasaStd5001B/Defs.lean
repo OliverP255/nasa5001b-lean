@@ -6,7 +6,7 @@
 
   All factors are represented as exact rationals (ℚ).
 
-  NASA-STD-5001B.md quotes sections of the official NASA standard and is the ground truth in this repo.
+  Md file of quoted definitions is used as ground truth
 -/
 
 import Mathlib.Data.Rat.Lemmas
@@ -17,9 +17,9 @@ namespace NasaStd5001B
 -- §4.1.1  Verification approaches
 -- ---------------------------------------------------------------------------
 
-/-- There are two test approaches as defined in §4.1.1.
-    · Prototype:  we use a dedicated part for testing.
-    · Protoflight: we test the same part that will be used in flight. -/
+/-- The two structural verification approaches defined in §4.1.1.
+    · Prototype:   dedicated part manufactured for testing
+    · Protoflight: same hardware tested as used in flight -/
 inductive TestApproach
   | prototype
   | protoflight
