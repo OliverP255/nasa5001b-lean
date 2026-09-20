@@ -1,6 +1,6 @@
 # NASA-STD-5001B, Ground Truth for Formalisation
 
-Source: NASA-STD-5001B, *Structural Design and Test Factors of Safety for Spaceflight Hardware*, approved 08-06-2014. This file contains only the definitions and requirements we are formalising. Text is transcribed verbatim from the standard; editorial notes are marked **[Note:]**.
+Source: NASA-STD-5001B, *Structural Design and Test Factors of Safety for Spaceflight Hardware*, approved 08-06-2014. This file contains only the definitions and requirements we are formalising. Text is transcribed verbatim from the standard. Editorial notes are marked **[Note:]**.
 
 ---
 
@@ -66,7 +66,7 @@ The protoflight verification approach has the advantage that a dedicated test un
 
 ## 4.1.2.1 Test Methods
 
-**[Note: guidance text.]** Strength verification tests fall into three basic categories: (1) tests to verify strength of the design (qualification); (2) tests to verify strength models; and (3) tests to screen for workmanship and material defects in the flight articles (acceptance or proof).
+**[Note: guidance text.]** Strength verification tests fall into three basic categories: (1) tests to verify strength of the design (qualification), (2) tests to verify strength models, and (3) tests to screen for workmanship and material defects in the flight articles (acceptance or proof).
 
 **Requirement (§4.1.2.1a).** The strength verification program shall be approved by the responsible Technical Authority.
 
@@ -149,7 +149,7 @@ $$\text{Yield Design Load} = \text{Limit Load} \times \text{Yield Design Factor}
 
 §4.2d is satisfied exactly when the Margin of Safety is non-negative for both yield and ultimate failure modes.
 
-**[Note:** this is a *necessary* condition for structural adequacy, not a sufficient one. A structure that satisfies §4.2d may still fail to be adequate under §4.2a–c and §4.2e, under the stability and detrimental-yielding requirements, or under the test requirements of §4.1. Only §4.2d is formalised here; the rest are assumptions. Do not read the theorems below as saying a design "is adequate".**]**
+**[Note:** this is a *necessary* condition for structural adequacy, not a sufficient one. A structure that satisfies §4.2d may still fail to be adequate under §4.2a–c and §4.2e, under the stability and detrimental-yielding requirements, or under the test requirements of §4.1. Only §4.2d is formalised here, the rest are assumptions. Do not read the theorems below as saying a design "is adequate".**]**
 
 That is:
 

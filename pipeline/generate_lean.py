@@ -77,7 +77,7 @@ def _choose_bound(q: Fraction, mat: Material, approach: str) -> tuple[Fraction, 
 
     √q is irrational in general, so the certificate is stated at a rational
     bracket around it.  To claim compliance we use the *upper* bound, which is
-    conservative; to claim non-compliance we use the *lower* bound, which is
+    conservative, to claim non-compliance we use the *lower* bound, which is
     equally conservative in the other direction.  If the two verdicts differ
     the design sits within one grid step of the §4.2d boundary, so we refine
     the grid until they agree.
@@ -99,7 +99,7 @@ def _choose_bound(q: Fraction, mat: Material, approach: str) -> tuple[Fraction, 
 def generate(geom: BracketGeometry, mat: Material, approach: str,
              limit_load_n: Fraction, fea: FEAResult,
              data_path: Path, thm_path: Path) -> GenerateResult:
-    """Write both generated Lean files; return what was claimed."""
+    """Write both generated Lean files, return what was claimed."""
     lame = fr.lame_from(mat.E, mat.nu)
     model = fea.to_model(lame)
     evals = model.eval_all()
@@ -241,7 +241,7 @@ def _write_theorems(path: Path, geom: BracketGeometry, mat: Material,
         f"  Material   : {mat.name}  (Fty = {_q(mat.Fty)} MPa, Ftu = {_q(mat.Ftu)} MPa)",
         f"  Approach   : {approach} (§4.1.1)",
         f"  Limit load : {float(limit_load_n):.0f} N, applied in −y at the free end",
-        "               (§3.2; the solve is performed at exactly this load, because",
+        "               (§3.2, the solve is performed at exactly this load, because",
         "               the Margin of Safety is defined at limit load)",
         "",
         f"  Mesh       : {fea.n_nodes} nodes, {fea.n_elements} C3D4 elements,"
@@ -295,7 +295,7 @@ def _write_theorems(path: Path, geom: BracketGeometry, mat: Material,
         "",
         "    `K` and `f` here are the ones Lean builds from the mesh in",
         "    `BracketData`, by `Fem.Assembly`.  CalculiX's `u` is only an input to",
-        "    this check; nothing the solver reported about it is taken on trust. -/",
+        "    this check, nothing the solver reported about it is taken on trust. -/",
         "theorem residual_ok : model.maxAbsResidual ≤ residualTol := by",
         "  decide +kernel",
         "",
@@ -355,8 +355,8 @@ def _write_theorems(path: Path, geom: BracketGeometry, mat: Material,
             "    model, subject to the assumptions recorded in the README.",
             "",
             "    Read the three conjuncts as: the solver's displacement really does",
-            "    solve the system Lean assembled; that displacement's peak von Mises",
-            "    stress is at most `sigmaBound`; and at `sigmaBound` the factored",
+            "    solve the system Lean assembled, that displacement's peak von Mises",
+            "    stress is at most `sigmaBound`, and at `sigmaBound` the factored",
             "    stresses stay within the material allowables. -/",
             "theorem bracket_certificate :",
             "    model.maxAbsResidual ≤ residualTol",
@@ -420,8 +420,8 @@ def _write_theorems(path: Path, geom: BracketGeometry, mat: Material,
             "    discrete model, subject to the assumptions recorded in the README.",
             "",
             "    Read the three conjuncts as: the solver's displacement really does",
-            "    solve the system Lean assembled; that displacement's peak von Mises",
-            "    stress is at least `sigmaBound`; and at `sigmaBound` some factored",
+            "    solve the system Lean assembled, that displacement's peak von Mises",
+            "    stress is at least `sigmaBound`, and at `sigmaBound` some factored",
             "    stress already exceeds its material allowable. -/",
             "theorem bracket_certificate :",
             "    model.maxAbsResidual ≤ residualTol",

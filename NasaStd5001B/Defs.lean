@@ -116,7 +116,7 @@ def StructuralCheck.ultimateMargin (s : StructuralCheck) : ℚ :=
 
     The `0 < s.σ_max` guard is required because ℚ division by zero returns 0, making
     marginOfSafety return −1 for any σ_max = 0.  Physically, σ_max = 0 under nonzero
-    load indicates a FEA failure; we make this a non-compliance condition explicitly. -/
+    load indicates a FEA failure, we make this a non-compliance condition explicitly. -/
 def StructuralCheck.isCompliant (s : StructuralCheck) : Prop :=
   0 < s.σ_max ∧ 0 ≤ s.yieldMargin ∧ 0 ≤ s.ultimateMargin
 

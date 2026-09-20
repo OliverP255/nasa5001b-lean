@@ -90,7 +90,7 @@ def strain_sums(g: Sequence[IVec3], u: Sequence[IVec3]) -> tuple[int, ...]:
 
 
 def hooke_raw(m: Lame, s: Sequence[int]) -> tuple[Fraction, ...]:
-    """Stress divided by k = ds/(cs·det J); denominator is only that of λ, μ."""
+    """Stress divided by k = ds/(cs·det J). Denominator is only that of λ, μ."""
     tr = s[0] + s[1] + s[2]
     lt = m.lam * tr
     return (lt + 2 * m.mu * s[0],

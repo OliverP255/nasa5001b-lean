@@ -68,7 +68,7 @@ def strainSums (e : Elem) (g0 g1 g2 g3 : Vec3) : Sym6 :=
         + (g2.z * e.u2.x + g2.x * e.u2.z) + (g3.z * e.u3.x + g3.x * e.u3.z) }
 
 /-- Hooke's law for an isotropic material, applied to the *unscaled* strain
-    sums `S`.  The result is the stress divided by `k = ds / (cs · det J)`;
+    sums `S`.  The result is the stress divided by `k = ds / (cs · det J)`,
     its only denominator is the one carried by λ and μ, which keeps the
     numbers small through the contraction below.  `scaleOf` puts `k` back. -/
 def hookeRaw (m : Material) (s : Sym6) : Sym6 :=
@@ -103,7 +103,7 @@ def stress (e : Elem) (m : Material) (cs ds : ℚ) : Sym6 :=
 
 /-- Von Mises stress *squared*, in MPa².
 
-    We keep the square because ℚ is not closed under square roots; the
+    We keep the square because ℚ is not closed under square roots, the
     comparison against the material allowable is done on squares instead
     (see `NasaStd5001B.Meta`). -/
 def vonMisesSq (s : Sym6) : ℚ :=
@@ -131,7 +131,7 @@ def RawState.vonMisesSq (st : RawState) (cs ds : ℚ) : ℚ :=
     factor `k = ds/(cs·det J)`, the volume and two powers of `det J` cancel
     into the single factor `cs·ds / (6·|det J|)`.
 
-    `a` is the local node index 0–3; out-of-range indices give the zero vector,
+    `a` is the local node index 0–3, out-of-range indices give the zero vector,
     which cannot arise from a generated model (the generator only ever emits
     0–3) but keeps the function total. -/
 def RawState.nodalForce (st : RawState) (cs ds : ℚ) (a : Nat) : Vec3 :=

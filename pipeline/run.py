@@ -8,14 +8,14 @@ Orchestrator: CAD → mesh → FEA → generated Lean → lake build → axiom a
   python -m pipeline --approach prototype     # prototype verification approach
   python -m pipeline --mesh-size 6            # finer mesh (slower to check)
 
-`--limit-load` is the Limit Load of NASA-STD-5001B §3.2: "the maximum
-anticipated load ... that a structure may experience during its design service
-life under all expected conditions of operation."  The FEA is run at exactly
-this load, because the Margin of Safety is defined in terms of the stress at
-limit load; running it at any other value and calling the result a limit
-stress would misapply §3.2.
+`--limit-load` is the Limit Load of NASA-STD-5001B §3.2
+"the maximum anticipated load ... that a structure may experience during its design service
+life under all expected conditions of operation."  
 
-Exit code 0 means the pipeline ran and Lean checked the certificate; 1 means
+The FEA is run at exactly this load, because the Margin of Safety is defined in terms of the stress at
+the limit load. 
+
+Exit code 0 means the pipeline ran and Lean checked the certificate. 1 means
 the certificate says the design does not comply, or something failed.
 """
 
@@ -50,7 +50,7 @@ AXIOM_LEAN = REPO_ROOT / "Scripts" / "Axioms.lean"
 DEFAULT_MESH_SIZE_MM = 10.0
 
 #: Axioms a certificate may legitimately depend on.  `ofReduceBool` would mean
-#: `native_decide` crept in, trusting the compiler; `sorryAx` an open goal.
+#: `native_decide` crept in, trusting the compiler, `sorryAx` an open goal.
 ALLOWED_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 BANNED_AXIOMS = {"ofReduceBool", "ofReduceNat", "sorryAx", "Lean.ofReduceBool"}
 
@@ -115,7 +115,7 @@ def run(limit_load_n: Fraction, approach: str, mesh_size_mm: float,
         print(f"      CalculiX    : v{fea.ccx_version}, peak von Mises "
               f"{fea.sigma_max_solver:.4f} MPa")
         if fea.min_quality < 0.10:
-            print("      WARNING: sliver elements present; a constant-strain")
+            print("      WARNING: sliver elements present, a constant-strain")
             print("               tetrahedron reports nonsense stress on those.")
 
         print("[3/5] Generating the Lean certificate ...")
@@ -127,7 +127,7 @@ def run(limit_load_n: Fraction, approach: str, mesh_size_mm: float,
               f"({rel:.1e} of the nodal load)")
         print(f"      Certifying  : ‖K u − f‖_∞ ≤ {float(gen.epsilon):.0e} N")
         print(f"      Peak stress : in [{float(gen.sigma_lo):.4f}, "
-              f"{float(gen.sigma_hi):.4f}] MPa; certified at "
+              f"{float(gen.sigma_hi):.4f}] MPa, certified at "
               f"{float(gen.sigma_bound):.4f} MPa")
         print(f"      Written     : {DATA_LEAN.name}, {THM_LEAN.name}")
 

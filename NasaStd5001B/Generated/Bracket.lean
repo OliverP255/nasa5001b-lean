@@ -7,7 +7,7 @@
   Material   : Al_6061-T6  (Fty = 276 MPa, Ftu = 310 MPa)
   Approach   : protoflight (§4.1.1)
   Limit load : 800 N, applied in −y at the free end
-               (§3.2; the solve is performed at exactly this load, because
+               (§3.2, the solve is performed at exactly this load, because
                the Margin of Safety is defined at limit load)
 
   Mesh       : 224 nodes, 679 C3D4 elements, min quality 0.355
@@ -56,7 +56,7 @@ def sigmaBound : ℚ := 64599/500
 
     `K` and `f` here are the ones Lean builds from the mesh in
     `BracketData`, by `Fem.Assembly`.  CalculiX's `u` is only an input to
-    this check; nothing the solver reported about it is taken on trust. -/
+    this check, nothing the solver reported about it is taken on trust. -/
 theorem residual_ok : model.maxAbsResidual ≤ residualTol := by
   decide +kernel
 
@@ -110,8 +110,8 @@ theorem bracket_compliant_below (σ : ℚ) (hσ : 0 < σ) (hle : σ ≤ sigmaBou
     model, subject to the assumptions recorded in the README.
 
     Read the three conjuncts as: the solver's displacement really does
-    solve the system Lean assembled; that displacement's peak von Mises
-    stress is at most `sigmaBound`; and at `sigmaBound` the factored
+    solve the system Lean assembled, that displacement's peak von Mises
+    stress is at most `sigmaBound`, and at `sigmaBound` the factored
     stresses stay within the material allowables. -/
 theorem bracket_certificate :
     model.maxAbsResidual ≤ residualTol

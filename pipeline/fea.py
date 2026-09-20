@@ -238,7 +238,7 @@ def _ccx_version() -> str:
 
 
 def _run_ccx(inp_path: Path) -> Path:
-    """Invoke CalculiX; return the path to its .dat output."""
+    """Invoke CalculiX, return the path to its .dat output."""
     stem = inp_path.stem
     result = subprocess.run([CCX_PATH, stem], cwd=inp_path.parent,
                             capture_output=True, text=True)
@@ -307,7 +307,7 @@ def _solve(work_dir: Path, tag: str, coords: dict[int, IVec3],
            elements: dict[int, tuple[int, ...]], fixed_nodes: list[int],
            cloads: dict[int, tuple[Fraction, Fraction, Fraction]],
            mat: Material) -> tuple[dict[int, IVec3], Path]:
-    """One CalculiX solve; returns displacements snapped to picometres."""
+    """One CalculiX solve, returns displacements snapped to picometres."""
     inp = work_dir / f"{tag}.inp"
     _write_ccx_inp(inp, coords, elements, fixed_nodes, cloads, mat)
     dat = _run_ccx(inp)
@@ -323,7 +323,7 @@ def run_fea(step_path: Path, geom: BracketGeometry, mat: Material,
             mesh_size_mm: float, refine: int = 1) -> FEAResult:
     """Mesh, solve, and return the exact discrete problem with the solver's `u`.
 
-    `limit_load_n` is the Limit Load of §3.2; the solve is performed at exactly
+    `limit_load_n` is the Limit Load of §3.2, the solve is performed at exactly
     this load, because the Margin of Safety is defined in terms of the stress
     at limit load.
 

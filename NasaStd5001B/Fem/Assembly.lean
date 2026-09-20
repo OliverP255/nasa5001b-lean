@@ -7,7 +7,7 @@
   the internal force contributed by every element incident to it and subtract
   the applied load, which gives that node's residual directly.  Constrained
   nodes carry an unknown reaction rather than a known load, so their
-  equilibrium says nothing about the solution; the generator omits them.
+  equilibrium says nothing about the solution, the generator omits them.
 
   Every recursion here is structural on a `List`.  The kernel has to reduce
   all of it during `decide +kernel`, and `Array` operations and well-founded
