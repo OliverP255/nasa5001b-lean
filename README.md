@@ -50,9 +50,9 @@ This repo is part of a larger aim to make engineering compliance machine-checkab
 
 To make this possible, the next steps are to formally verify the inputs to the system as best as we can. That means verifying the 3D design, meshing process, the boundary conditions and material model. 
 
-Verifying the 3D design means formalising the geometric dimensioning and tolerancing (GD&T) of the CAD model. If we do that, definitions from the standard such as "detrimental yielding" (as in §3.2) can be made rigorous. I have already worked on formalising tolerancing in my own repo [formal-gdt]([https://github.com/OliverP255/formal-gdt](https://github.com/OliverP255/formal-gdt)).
+Verifying the 3D design means formalising the geometric dimensioning and tolerancing (GD&T) of the CAD model. If we do that, definitions from the standard such as "detrimental yielding" (as in §3.2) can be made rigorous. I have already worked on formalising tolerancing in my own repo [formal-gdt](https://github.com/OliverP255/formal-gdt).
 
-Complementary to this aim, I’ve written [a short essay]([https://www.oliverpryce.xyz/what-happens-when-design-becomes-automated/](https://www.oliverpryce.xyz/what-happens-when-design-becomes-automated/)), discussing what this formal approach to design would look like. 
+Complementary to this aim, I’ve written [a short essay](https://www.oliverpryce.xyz/what-happens-when-design-becomes-automated/), discussing what this formal approach to design would look like. 
 
 
 
