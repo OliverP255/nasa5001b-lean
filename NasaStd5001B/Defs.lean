@@ -18,8 +18,8 @@ namespace NasaStd5001B
 -- ---------------------------------------------------------------------------
 
 /-- The two structural verification approaches defined in §4.1.1.
-    · Prototype:   dedicated test article tested to ultimate loads.
-    · Protoflight: flight hardware tested above limit load but below yield. -/
+    · Prototype:   dedicated part manufactured for testing
+    · Protoflight: same hardware tested as used in flight-/
 inductive TestApproach
   | prototype
   | protoflight
