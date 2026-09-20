@@ -13,9 +13,6 @@ corresponding Lean definition computes.  It has two jobs:
      (verified by the pipeline) and its stresses must agree with CalculiX's own
      (verified by `check_against_solver`).
 
-Nothing here is trusted by the proof.  If this file were wrong, the Lean
-certificate would simply fail to build, because Lean recomputes all of it.
-
 Scaling convention (must match Fem/Types.lean):
   · node coordinates are integers in units of `cs` mm
   · nodal displacements are integers in units of `ds` mm
@@ -200,12 +197,7 @@ def max_von_mises_sq(model: DiscreteModel,
 # ---------------------------------------------------------------------------
 
 def choose_epsilon(exact: Fraction) -> Fraction:
-    """Smallest power of ten strictly above the exact residual.
-
-    Rounding the bound up to a power of ten keeps the published tolerance
-    honest and readable: it is never tighter than what was actually achieved,
-    and it does not leak the exact residual digits into the statement.
-    """
+    """Smallest power of ten strictly above the exact residual."""
     if exact <= 0:
         return Fraction(1, 10 ** 12)
     e = math.floor(math.log10(float(exact)))
@@ -240,11 +232,7 @@ def stress_bounds(q: Fraction, grid: int = 1000) -> tuple[Fraction, Fraction]:
 def check_against_solver(model: DiscreteModel,
                          solver_vm_max: float,
                          evals: dict[int, ElemEval] | None = None) -> float:
-    """Relative difference between our peak von Mises and the solver's.
-
-    A large value means the Lean element formulation and CalculiX disagree
-    about what the discrete model *is*, a modelling bug, not a solver error.
-    """
+    """Relative difference between our peak von Mises stress and the solver's"""
     q = max_von_mises_sq(model, evals)
     ours = math.sqrt(float(q))
     if solver_vm_max == 0:

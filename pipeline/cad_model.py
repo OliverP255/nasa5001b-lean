@@ -1,11 +1,12 @@
 """
 pipeline/cad_model.py
 
-Parametric cantilever L-bracket in build123d.
+Constructs a Parametric cantilever L-bracket.
 
 The bracket is a rectangular cross-section beam fixed at one end, with a
-concentrated load applied at the free end.  Geometry is exported to STEP
-for meshing by Gmsh.
+concentrated load applied at the free end.  
+
+Geometry built in build123d, exported to STEP, meshed by Gmsh
 
 Ground truth: NASA-STD-5001B.md §3.2 (Limit Load definition).
 """
@@ -29,15 +30,15 @@ class BracketGeometry:
 class Material:
     """Linear-elastic isotropic material properties.
 
-    `E` and `nu` are exact rationals, not floats: they define the stiffness
+    E and nu are exact rationals. They define the stiffness
     matrix that Lean assembles, so they have to be the same numbers on both
     sides of the pipeline.  They are converted to decimal only when writing
     the solver's input deck.
 
-    `Fty`/`Ftu` are the material allowables of §4.2d.  NOTE: §4.2c requires
-    allowables derived per NASA-STD-6016 (MMPDS).  The values below are
-    typical handbook properties for the alloy and are an *assumed input* to
-    the certificate, see the trusted-inputs table in the README.
+    Fty/Ftu are the material allowables of §4.2d.
+
+    NOTE: Material values below are typical properties for the alloy and are an *assumed input* to
+    the certificate.
     """
     name:    str
     E:       Fraction  # Young's modulus (MPa)

@@ -3,23 +3,8 @@ pipeline/fea.py
 
 FEA stage: STEP → Gmsh mesh → CalculiX solve → the exact discrete model.
 
-Unlike a conventional FEA driver, this stage does not produce "the answer".
-It produces an exactly-specified discrete problem together with CalculiX's
-*proposed* solution, so that Lean can check the proposal for itself:
-
-  1. Mesh (Gmsh): import STEP, generate a C3D4 tetrahedral mesh.
-  2. Snap: round every node coordinate to an integer number of micrometres.
-     The snapped coordinates are what gets written to CalculiX, so the solver
-     and Lean are talking about the same mesh rather than two mesh-shaped
-     objects that differ in the last few bits.
-  3. Solve (CalculiX): assemble the .inp deck, run ccx, read back both the
-     displacement field and the solver's own stresses.
-  4. Snap again: round displacements to an integer number of picometres.
-
-Boundary conditions are selected by exact integer comparison on the snapped
-coordinates: the fixed face is `z == z_min` and the loaded face is `z == z_max`.
-A tolerance-based selection would silently capture a different node set on a
-different mesh, which would change the problem being certified.
+It produces an exactly-specified discrete FEA problem together with CalculiX's
+*proposed* solution. Lean checks the correctness of the proposed solution.
 """
 
 from __future__ import annotations
@@ -50,11 +35,10 @@ IVec3 = tuple[int, int, int]
 
 @dataclass(frozen=True)
 class FEAResult:
-    """The discrete problem, plus CalculiX's proposed solution.
+    """The discrete FEA problem, plus CalculiX's proposed solution.
 
-    Coordinates are integer multiples of `COORD_SCALE` mm and displacements
-    integer multiples of `DISP_SCALE` mm, so that every number reaching Lean
-    is an integer.
+    Coordinates are integer multiples of COORD_SCALE mm and displacements
+    integer multiples of DISP_SCALE mm.
     """
     coords: dict[int, IVec3]
     elements: dict[int, tuple[int, ...]]
@@ -76,7 +60,7 @@ class FEAResult:
 
     @property
     def free_nodes(self) -> list[int]:
-        """Nodes whose equilibrium is checked: everything but the fixed face.
+        """Nodes whose equilibrium is checked.
 
         Constrained nodes carry an unknown reaction, so their equilibrium
         equation contains an unknown and says nothing about the solution.
@@ -104,14 +88,7 @@ class FEAResult:
 # ---------------------------------------------------------------------------
 
 def _mesh(step_path: Path, inp_path: Path, mesh_size_mm: float) -> None:
-    """Import STEP, generate a linear C3D4 mesh, write it as ABAQUS .inp.
-
-    Mesh optimisation is essential here, not cosmetic.  A constant-strain
-    tetrahedron recovers stress from a single gradient, so a sliver element, one nearly flat, with a tiny Jacobian, reports a wildly wrong stress.
-    Without optimisation, coarse meshes of this bracket put their peak stress
-    on a sliver sitting at the neutral axis, where the bending stress should
-    be zero.  `check_mesh_quality` guards against what optimisation misses.
-    """
+    """Import STEP, generate a linear C3D4 mesh, write it as ABAQUS .inp."""
     gmsh.initialize()
     try:
         gmsh.option.setNumber("General.Verbosity", 0)
@@ -131,12 +108,7 @@ def _mesh(step_path: Path, inp_path: Path, mesh_size_mm: float) -> None:
 
 
 def element_quality(p: list[IVec3]) -> float:
-    """Normalised tetrahedron quality: 1.0 is regular, 0.0 is degenerate.
-
-    `6√2·V / ℓ_rms³`, where ℓ_rms is the root-mean-square edge length.  A
-    regular tetrahedron has volume a³/(6√2), so this is 1 for a regular
-    element and tends to 0 as the element flattens into a sliver.
-    """
+    """Normalised tetrahedron quality: 1.0 is regular, 0.0 is degenerate."""
     c1 = [p[1][r] - p[0][r] for r in range(3)]
     c2 = [p[2][r] - p[0][r] for r in range(3)]
     c3 = [p[3][r] - p[0][r] for r in range(3)]
@@ -188,7 +160,7 @@ def _parse_gmsh_inp(inp_path: Path) -> tuple[dict[int, tuple[float, float, float
 
 
 def _snap_coords(nodes: dict[int, tuple[float, float, float]]) -> dict[int, IVec3]:
-    """Round every coordinate to an integer multiple of `COORD_SCALE` mm."""
+    """Round every coordinate to an integer multiple of COORD_SCALE mm."""
     inv = 1 / float(COORD_SCALE)
     return {n: (round(x * inv), round(y * inv), round(z * inv))
             for n, (x, y, z) in nodes.items()}

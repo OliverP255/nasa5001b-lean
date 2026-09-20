@@ -6,21 +6,11 @@ Emit the generated Lean certificate from an FEA run.
 Two files are written:
 
   NasaStd5001B/Generated/BracketData.lean
-      The discrete model: one `Elem` per tetrahedron, one `RawState` per
-      element, the per-node equilibrium checks, and the `Model` tying them
-      together.  Every literal is an integer, in the scaled units of
-      `Fem/Types.lean`, so that Lean never normalises a fraction while
-      reading the data.
-
   NasaStd5001B/Generated/Bracket.lean
-      The theorems.  One clause of the standard per theorem, all closed by
-      `decide +kernel`, never by `native_decide` and never by `sorry`.
 
-Nothing written here is trusted.  The generator chooses *which* statement to
-make, the tolerance ε and the stress bound σ, but Lean recomputes both
-quantities from the model and rejects the file if either claim is false.  A
-bug in this generator produces a certificate that does not build, not a
-certificate that is wrong.
+The generator chooses *which* statement to make, the tolerance ε and the stress bound σ, 
+but Lean recomputes both quantities from the model and rejects the file if either claim is false.  
+A bug in this generator would produce a certificate that does not build.
 """
 
 from __future__ import annotations
@@ -60,7 +50,6 @@ class GenerateResult:
 def _q(f: Fraction) -> str:
     """Format an exact rational as a Lean ℚ literal."""
     return str(f.numerator) if f.denominator == 1 else f"{f.numerator}/{f.denominator}"
-
 
 def _v3(v) -> str:
     return f"⟨{v[0]},{v[1]},{v[2]}⟩"
