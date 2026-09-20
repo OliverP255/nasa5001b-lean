@@ -4,8 +4,7 @@
   The C3D4 element: shape-function gradients, strain, stress, von Mises, and
   the internal nodal forces K_e u_e.  Everything is exact over ℚ.
 
-  Formulation
-  -----------
+  ## Formulation
   The element maps the reference tetrahedron by
       x(ξ,η,ζ) = p₀ + ξ(p₁−p₀) + η(p₂−p₀) + ζ(p₃−p₀),
   so with columns c₁ = p₁−p₀, c₂ = p₂−p₀, c₃ = p₃−p₀ the Jacobian is
