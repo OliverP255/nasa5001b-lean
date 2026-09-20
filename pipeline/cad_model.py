@@ -1,7 +1,7 @@
 """
 pipeline/cad_model.py
 
-Constructs a Parametric cantilever L-bracket.
+Constructs a parametric cantilever L-bracket.
 
 The bracket is a rectangular cross-section beam fixed at one end, with a
 concentrated load applied at the free end.  
@@ -37,8 +37,8 @@ class Material:
 
     Fty/Ftu are the material allowables of §4.2d.
 
-    NOTE: Material values below are typical properties for the alloy and are an *assumed input* to
-    the certificate.
+    NOTE: Material values below are only typical properties for the alloy. 
+    These are inputs to the system and the material model is assumed to be trusted. 
     """
     name:    str
     E:       Fraction  # Young's modulus (MPa)

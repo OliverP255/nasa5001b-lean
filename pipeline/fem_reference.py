@@ -3,7 +3,7 @@ pipeline/fem_reference.py
 
 An exact-rational mirror of NasaStd5001B/Fem/*.lean.
 
-Every function here computes, in Python Fraction arithmetic, exactly what the
+Every function here computes in Python Fraction arithmetic exactly what the
 corresponding Lean definition computes.  It has two jobs:
 
   1. Choose the constants that go into the certificate, the residual tolerance

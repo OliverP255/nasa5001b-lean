@@ -169,7 +169,7 @@ def _orient(coords: dict[int, IVec3],
             elements: dict[int, tuple[int, ...]]) -> dict[int, tuple[int, ...]]:
     """Give every tetrahedron a positive Jacobian, as CalculiX requires.
 
-    Snapping can in principle flip a nearly-degenerate element, so this is
+    Snapping from floating-point to rationals can in principle flip an element that is nearly degenerate, so this is
     done on the snapped coordinates that both solvers actually see.
     """
     out: dict[int, tuple[int, ...]] = {}
@@ -325,18 +325,15 @@ def run_fea(step_path: Path, geom: BracketGeometry, mat: Material,
     limit_load_n is the Limit Load of §3.2, the solve is performed at exactly
     this load, because the Margin of Safety is defined in terms of the stress
     at limit load.
-
-    Iterative refinement (refine extra solves)
-    -------------------------------------------
+    
     CalculiX prints displacements to seven significant figures, which by itself
     leaves a residual of order 1 N, far too coarse to be a meaningful check.
-    So we compute the exact residual r = K u − f and ask CalculiX to solve
-    K δ = −r, then take u + δ.  Because δ is small, seven significant
-    figures of δ are many more significant figures of u, and each pass
-    reduces the residual by roughly three orders of magnitude.
 
-    This is still only the solver proposing a correction: the refined u is no
-    more trusted than the original, and Lean checks it exactly the same way.
+    So we compute the exact residual r = K u − f and ask CalculiX to solve
+    K δ = −r, then take u + δ.  
+    
+    Because δ is small, seven significant figures of δ are many more significant figures of u, 
+    and each pass reduces the residual by roughly three orders of magnitude.
     """
     from . import fem_reference as fr
 

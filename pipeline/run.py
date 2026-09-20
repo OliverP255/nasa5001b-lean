@@ -1,19 +1,11 @@
 """
 pipeline/run.py
-
-Orchestrator: CAD → mesh → FEA → generated Lean → lake build → axiom audit.
-
   python -m pipeline                          # 800 N, protoflight, Al 6061-T6
   python -m pipeline --limit-load 2000        # overloaded bracket
   python -m pipeline --approach prototype     # prototype verification approach
   python -m pipeline --mesh-size 6            # finer mesh (slower to check)
 
 --limit-load is the Limit Load of NASA-STD-5001B §3.2
-"the maximum anticipated load ... that a structure may experience during its design service
-life under all expected conditions of operation."  
-
-The FEA is run at exactly this load, because the Margin of Safety is defined in terms of the stress at
-the limit load. 
 
 Exit code 0 means the pipeline ran and Lean checked the certificate. 1 means
 the certificate says the design does not comply, or something failed.
