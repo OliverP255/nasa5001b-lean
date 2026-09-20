@@ -74,7 +74,7 @@ def proofTestFactor : ℚ := 21 / 20   -- 1.05  (propellant tanks and SRM cases 
       · limitStress = stress computed by FEA at the limit load
       · df = design factor
 
-    NOTE: `limitStress` MUST be the stress under the limit load specifically.
+    NOTE: limitStress MUST be the stress under the limit load specifically.
     Passing FEA results at any other load value violates the MS definition. -/
 def marginOfSafety (allowable limitStress df : ℚ) : ℚ :=
   allowable / (limitStress * df) - 1
@@ -114,7 +114,7 @@ def StructuralCheck.ultimateMargin (s : StructuralCheck) : ℚ :=
     MS ≥ 0  ⟺  allowable / (limit × DF) ≥ 1  ⟺  limit × DF ≤ allowable
               ⟺  factored stress ≤ allowable  ✓
 
-    The `0 < s.σ_max` guard is required because ℚ division by zero returns 0, making
+    The 0 < s.σ_max guard is required because ℚ division by zero returns 0, making
     marginOfSafety return −1 for any σ_max = 0.  Physically, σ_max = 0 under nonzero
     load indicates a FEA failure, we make this a non-compliance condition explicitly. -/
 def StructuralCheck.isCompliant (s : StructuralCheck) : Prop :=

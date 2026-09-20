@@ -34,7 +34,7 @@
 import NasaStd5001B.Generated.BracketData
 import NasaStd5001B.Meta
 
--- `decide +kernel` unfolds the whole model, which is deeper than the
+-- decide +kernel unfolds the whole model, which is deeper than the
 -- default recursion limit allows.
 set_option maxRecDepth 1000000
 
@@ -52,10 +52,10 @@ def sigmaBound : ℚ := 64599/500
 -- 1. The solver's displacement satisfies the system Lean assembled
 -- ---------------------------------------------------------------------
 
-/-- `‖K u − f‖_∞ ≤ ε` over every free node.
+/-- ‖K u − f‖_∞ ≤ ε over every free node.
 
-    `K` and `f` here are the ones Lean builds from the mesh in
-    `BracketData`, by `Fem.Assembly`.  CalculiX's `u` is only an input to
+    K and f here are the ones Lean builds from the mesh in
+    BracketData, by Fem.Assembly.  CalculiX's u is only an input to
     this check, nothing the solver reported about it is taken on trust. -/
 theorem residual_ok : model.maxAbsResidual ≤ residualTol := by
   decide +kernel
@@ -65,7 +65,7 @@ theorem residual_ok : model.maxAbsResidual ≤ residualTol := by
 -- ---------------------------------------------------------------------
 
 /-- The largest von Mises stress over all elements is at most
-    `sigmaBound`, stated on squares because ℚ has no square roots. -/
+    sigmaBound, stated on squares because ℚ has no square roots. -/
 theorem stress_bounded : model.maxVonMisesSq ≤ sigmaBound ^ 2 := by
   decide +kernel
 
@@ -111,7 +111,7 @@ theorem bracket_compliant_below (σ : ℚ) (hσ : 0 < σ) (hle : σ ≤ sigmaBou
 
     Read the three conjuncts as: the solver's displacement really does
     solve the system Lean assembled, that displacement's peak von Mises
-    stress is at most `sigmaBound`, and at `sigmaBound` the factored
+    stress is at most sigmaBound, and at sigmaBound the factored
     stresses stay within the material allowables. -/
 theorem bracket_certificate :
     model.maxAbsResidual ≤ residualTol

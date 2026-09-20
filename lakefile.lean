@@ -4,7 +4,7 @@ open Lake DSL
 package «nasa5001b-lean» where
   leanOptions := #[⟨`autoImplicit, false⟩]
 
--- Pinned to an exact revision, not `master`.  A certificate is a claim about
+-- Pinned to an exact revision, not master.  A certificate is a claim about
 -- what a particular Lean and a particular Mathlib accept, so the build has to
 -- be reproducible: floating the dependency would mean the proof that was
 -- checked and the proof a reader checks are not necessarily the same proof.

@@ -6,7 +6,7 @@
   The discrete model: node coordinates in micrometres and the solver's
   proposed displacements in picometres, both as exact integers, so that
   the scales (1/1000 mm and 1/1000000000000 mm) are applied
-  by `Fem.Element` rather than baked into the literals.
+  by Fem.Element rather than baked into the literals.
 
   Mesh     : 224 nodes, 679 C3D4 elements
   Checked  : 211 free nodes, 2624 element incidences
@@ -16,7 +16,7 @@
 import NasaStd5001B.Fem.Assembly
 
 -- The node and element lists below are long, and a list literal
--- elaborates as nested `cons`, so the default recursion limit is far
+-- elaborates as nested cons, so the default recursion limit is far
 -- too low to read this file.
 set_option maxRecDepth 1000000
 

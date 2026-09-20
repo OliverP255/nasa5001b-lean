@@ -1,10 +1,11 @@
 """
 Analytic checks on the exact FEM reference implementation.
 
-These are the properties a linear-elastic C3D4 element must have, and they are
-the same properties `NasaStd5001B/Fem/Test.lean` checks on the Lean side.  If
-the two implementations ever drift apart, the generated certificate stops
-building, but these tests catch the error much earlier and say what broke.
+These are the properties a linear-elastic C3D4 element must have.
+These are the same properties NasaStd5001B/Fem/Test.lean checks on the Lean side.
+
+If the two implementations ever drift apart, the generated certificate stops
+building.
 """
 
 from __future__ import annotations
@@ -106,13 +107,7 @@ def _kuhn_box(nx, ny, nz, jitter=True):
 
 
 def test_patch_test_linear_field_has_zero_residual():
-    """A globally linear displacement field must be in exact equilibrium.
-
-    This is the standard finite-element patch test.  It is the strongest
-    single check on the element formulation: it fails for almost any error in
-    the shape-function gradients, the strain–displacement operator, the
-    Jacobian scaling or the volume factor.
-    """
+    """A globally linear displacement field must be in exact equilibrium. """
     coords, elems, interior = _kuhn_box(5, 3, 3, jitter=True)
     A = [[3, -1, 2], [1, 4, -2], [-3, 2, 5]]
     disps = {n: tuple(A[r][0] * c[0] + A[r][1] * c[1] + A[r][2] * c[2]

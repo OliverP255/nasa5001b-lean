@@ -20,12 +20,12 @@
       ĝ₁ = c₂×c₃,  ĝ₂ = c₃×c₁,  ĝ₃ = c₁×c₂,  ĝ₀ = −(ĝ₁+ĝ₂+ĝ₃),
       ∇N_a = ĝ_a / det J.
 
-  We keep the *unscaled* `ĝ_a` because, with integer node coordinates, they are
-  integers: the single division by `det J` is deferred and then cancels against
+  We keep the *unscaled* ĝ_a because, with integer node coordinates, they are
+  integers: the single division by det J is deferred and then cancels against
   the element volume, so each element needs only one rational division.
 
-  Scaling.  Coordinates carry a factor `cs` (mm per raw unit) and
-  displacements a factor `ds`.  Writing `S` for the integer strain sums
+  Scaling.  Coordinates carry a factor cs (mm per raw unit) and
+  displacements a factor ds.  Writing S for the integer strain sums
   Σ_a ĝ_a ⊗ u_a (Voigt, engineering shear), the true strain is
 
       ε = k·S        with  k = ds / (cs · det J),
@@ -34,7 +34,7 @@
 
       f_a = V · Bᵀ_a σ = (sgn(det J) · cs² / 6) · Cᵀ(ĝ_a) σ,
 
-  the volume and one factor of `det J` having cancelled.
+  the volume and one factor of det J having cancelled.
 -/
 
 import NasaStd5001B.Fem.Types
@@ -43,7 +43,7 @@ namespace NasaStd5001B.Fem
 
 namespace Elem
 
-/-- The four unscaled shape-function gradients `ĝ_a` together with `det J`. -/
+/-- The four unscaled shape-function gradients ĝ_a together with det J. -/
 def kinematics (e : Elem) : Vec3 × Vec3 × Vec3 × Vec3 × ℚ :=
   let c1 := Vec3.sub e.p1 e.p0
   let c2 := Vec3.sub e.p2 e.p0
@@ -54,7 +54,7 @@ def kinematics (e : Elem) : Vec3 × Vec3 × Vec3 × Vec3 × ℚ :=
   let g0 := Vec3.neg (Vec3.add g1 (Vec3.add g2 g3))
   (g0, g1, g2, g3, Vec3.dot c1 g1)
 
-/-- The integer strain sums `S = Σ_a ĝ_a ⊗ u_a` in Voigt order, using
+/-- The integer strain sums S = Σ_a ĝ_a ⊗ u_a in Voigt order, using
     engineering shear (γ_xy = 2ε_xy). -/
 def strainSums (e : Elem) (g0 g1 g2 g3 : Vec3) : Sym6 :=
   { xx := g0.x * e.u0.x + g1.x * e.u1.x + g2.x * e.u2.x + g3.x * e.u3.x
@@ -68,9 +68,9 @@ def strainSums (e : Elem) (g0 g1 g2 g3 : Vec3) : Sym6 :=
         + (g2.z * e.u2.x + g2.x * e.u2.z) + (g3.z * e.u3.x + g3.x * e.u3.z) }
 
 /-- Hooke's law for an isotropic material, applied to the *unscaled* strain
-    sums `S`.  The result is the stress divided by `k = ds / (cs · det J)`,
+    sums S.  The result is the stress divided by k = ds / (cs · det J),
     its only denominator is the one carried by λ and μ, which keeps the
-    numbers small through the contraction below.  `scaleOf` puts `k` back. -/
+    numbers small through the contraction below.  scaleOf puts k back. -/
 def hookeRaw (m : Material) (s : Sym6) : Sym6 :=
   let tr := s.xx + s.yy + s.zz
   let lt := m.lam * tr
@@ -81,10 +81,10 @@ def hookeRaw (m : Material) (s : Sym6) : Sym6 :=
     yz := m.mu * s.yz
     zx := m.mu * s.zx }
 
-/-- The factor `k = ds / (cs · det J)` relating `hookeRaw` to the true stress. -/
+/-- The factor k = ds / (cs · det J) relating hookeRaw to the true stress. -/
 def scaleOf (cs ds det : ℚ) : ℚ := ds / (cs * det)
 
-/-- The element's unscaled stress, together with its gradients and `det J`. -/
+/-- The element's unscaled stress, together with its gradients and det J. -/
 def rawState (e : Elem) (m : Material) : RawState :=
   let kin := e.kinematics
   let g0 := kin.1
@@ -105,12 +105,12 @@ def stress (e : Elem) (m : Material) (cs ds : ℚ) : Sym6 :=
 
     We keep the square because ℚ is not closed under square roots, the
     comparison against the material allowable is done on squares instead
-    (see `NasaStd5001B.Meta`). -/
+    (see NasaStd5001B.Meta). -/
 def vonMisesSq (s : Sym6) : ℚ :=
   ((s.xx - s.yy) ^ 2 + (s.yy - s.zz) ^ 2 + (s.zz - s.xx) ^ 2) / 2
     + 3 * (s.xy ^ 2 + s.yz ^ 2 + s.zx ^ 2)
 
-/-- `Cᵀ(g) σ`, the gradient–stress contraction appearing in the nodal force. -/
+/-- Cᵀ(g) σ, the gradient–stress contraction appearing in the nodal force. -/
 def contract (g : Vec3) (s : Sym6) : Vec3 :=
   ⟨g.x * s.xx + g.y * s.xy + g.z * s.zx,
    g.y * s.yy + g.x * s.xy + g.z * s.yz,
@@ -121,17 +121,17 @@ end Elem
 /-- Von Mises stress squared of an element state, in MPa².
 
     Von Mises squared is homogeneous of degree 2 in the stress, so it can be
-    taken on the unscaled stress and corrected by `k²` afterwards. -/
+    taken on the unscaled stress and corrected by k² afterwards. -/
 def RawState.vonMisesSq (st : RawState) (cs ds : ℚ) : ℚ :=
   Elem.scaleOf cs ds st.2.2.2.2.2 ^ 2 * Elem.vonMisesSq st.1
 
-/-- The internal force `(K_e u_e)` at local node `a` of an element state, in N.
+/-- The internal force (K_e u_e) at local node a of an element state, in N.
 
-    Combining `V = |det J|·cs³/6`, the gradient `ĝ_a / det J` and the stress
-    factor `k = ds/(cs·det J)`, the volume and two powers of `det J` cancel
-    into the single factor `cs·ds / (6·|det J|)`.
+    Combining V = |det J|·cs³/6, the gradient ĝ_a / det J and the stress
+    factor k = ds/(cs·det J), the volume and two powers of det J cancel
+    into the single factor cs·ds / (6·|det J|).
 
-    `a` is the local node index 0–3, out-of-range indices give the zero vector,
+    a is the local node index 0–3, out-of-range indices give the zero vector,
     which cannot arise from a generated model (the generator only ever emits
     0–3) but keeps the function total. -/
 def RawState.nodalForce (st : RawState) (cs ds : ℚ) (a : Nat) : Vec3 :=
@@ -151,7 +151,7 @@ namespace Elem
 def elemVonMisesSq (e : Elem) (m : Material) (cs ds : ℚ) : ℚ :=
   (e.rawState m).vonMisesSq cs ds
 
-/-- The internal force `(K_e u_e)` at local node `a`, in N. -/
+/-- The internal force (K_e u_e) at local node a, in N. -/
 def nodalForce (e : Elem) (m : Material) (cs ds : ℚ) (a : Nat) : Vec3 :=
   (e.rawState m).nodalForce cs ds a
 

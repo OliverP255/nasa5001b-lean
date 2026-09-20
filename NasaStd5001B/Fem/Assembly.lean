@@ -1,7 +1,7 @@
 /-
   NasaStd5001B.Fem.Assembly
 
-  Assembly of the residual `r = K u − f` and recovery of the peak stress.
+  Assembly of the residual r = K u − f and recovery of the peak stress.
 
   The global stiffness matrix is never formed.  For each free node we gather
   the internal force contributed by every element incident to it and subtract
@@ -9,8 +9,8 @@
   nodes carry an unknown reaction rather than a known load, so their
   equilibrium says nothing about the solution, the generator omits them.
 
-  Every recursion here is structural on a `List`.  The kernel has to reduce
-  all of it during `decide +kernel`, and `Array` operations and well-founded
+  Every recursion here is structural on a List.  The kernel has to reduce
+  all of it during decide +kernel, and Array operations and well-founded
   recursion do not reduce well there.
 -/
 
@@ -23,7 +23,7 @@ def sumIncident (cs ds : ℚ) : List (RawState × Nat) → Vec3 → Vec3
   | [],            acc => acc
   | (st, a) :: t,  acc => sumIncident cs ds t (Vec3.add acc (st.nodalForce cs ds a))
 
-/-- The residual `(K u)_i − f_i` at a single node, in N. -/
+/-- The residual (K u)_i − f_i at a single node, in N. -/
 def nodeResidual (cs ds : ℚ) (n : NodeCheck) : Vec3 :=
   Vec3.sub (sumIncident cs ds n.incid Vec3.zero) n.fext
 
@@ -39,7 +39,7 @@ def maxVMSq (cs ds : ℚ) : List RawState → ℚ → ℚ
 
 namespace Model
 
-/-- `‖K u − f‖_∞` over the free nodes, in N.
+/-- ‖K u − f‖_∞ over the free nodes, in N.
 
     This is the quantity the certificate bounds: it measures how far the
     solver's proposed displacement field is from satisfying the discrete

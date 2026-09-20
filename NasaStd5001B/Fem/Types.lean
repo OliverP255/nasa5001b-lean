@@ -10,14 +10,14 @@
   rationals in scaled units, so that every literal in the generated model file
   is an integer and the kernel never normalises a fraction while reading data:
 
-    · coordinates   `p` are in units of `cs` mm   (cs = 1/1000 ⇒ micrometres)
-    · displacements `u` are in units of `ds` mm   (ds = 1/10^9 ⇒ picometres)
+    · coordinates   p are in units of cs mm   (cs = 1/1000 ⇒ micrometres)
+    · displacements u are in units of ds mm   (ds = 1/10^9 ⇒ picometres)
 
-  `cs` and `ds` are carried by `Model` and reintroduced by `Fem.Element`, which
+  cs and ds are carried by Model and reintroduced by Fem.Element, which
   works out the true stresses in MPa and the true nodal forces in N.
 
   All vector operations are plain functions rather than typeclass instances:
-  the kernel has to reduce every one of them during `decide +kernel`, and
+  the kernel has to reduce every one of them during decide +kernel, and
   direct definitions reduce far more predictably than instance projections.
 -/
 
@@ -53,8 +53,8 @@ def cross (a b : Vec3) : Vec3 :=
 
 end Vec3
 
-/-- Absolute value on ℚ, written with `<` so the kernel reduces it directly
-    rather than through the `Lattice`/`abs` hierarchy. -/
+/-- Absolute value on ℚ, written with < so the kernel reduces it directly
+    rather than through the Lattice/abs hierarchy. -/
 def qabs (a : ℚ) : ℚ := if a < 0 then -a else a
 
 /-- Binary max on ℚ, likewise spelled out for kernel reduction. -/
@@ -65,7 +65,7 @@ def Vec3.maxAbs (a : Vec3) : ℚ := qmax (qabs a.x) (qmax (qabs a.y) (qabs a.z))
 
 /-- Isotropic linear-elastic material, stored as Lamé parameters.
 
-    From Young's modulus `E` and Poisson's ratio `ν`:
+    From Young's modulus E and Poisson's ratio ν:
       λ = E·ν / ((1+ν)(1−2ν))     μ = E / (2(1+ν))
     The generator computes these exactly and emits them as rationals, so that
     the kernel never has to divide while setting up the material. -/
@@ -89,7 +89,7 @@ structure Sym6 where
     displacement proposed by the solver at each of those nodes.
 
     Node ordering is the standard C3D4/Abaqus ordering, matching the
-    `*ELEMENT, TYPE=C3D4` connectivity written to CalculiX. -/
+    *ELEMENT, TYPE=C3D4 connectivity written to CalculiX. -/
 structure Elem where
   p0 : Vec3
   p1 : Vec3
@@ -102,7 +102,7 @@ structure Elem where
   deriving Repr, DecidableEq
 
 /-- Everything about one element that both the residual and the stress recovery
-    need: its unscaled stress, its four shape-function gradients, and `det J`.
+    need: its unscaled stress, its four shape-function gradients, and det J.
 
     Each element appears in the residual check once per node it touches, four
     times over.  Naming this state lets the generated model bind it to a single
@@ -121,7 +121,7 @@ structure NodeCheck where
     and the element states used for the stress recovery.
 
     The material enters through the element states, which are computed from the
-    elements by `Elem.rawState`, so it is not carried separately here. -/
+    elements by Elem.rawState, so it is not carried separately here. -/
 structure Model where
   cs    : ℚ
   ds    : ℚ

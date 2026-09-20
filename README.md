@@ -30,7 +30,7 @@ I've formalised the structural analysis tests as in NASA-STD-5001B and verified 
 
 I formalised the structural analysis tests in NASA-STD-5001B. This repo focuses on §3.2, Table 1, and §4.2d.
 
-`NasaStd5001B/Meta.lean` proves properties of the standard itself, including the main theorem about the correctness of the requirements:
+NasaStd5001B/Meta.lean proves properties of the standard itself, including the main theorem about the correctness of the requirements:
 
 $$MS \geq 0 \iff \sigma_{\text{factored}} \leq \sigma_{\text{allowable}}$$
 

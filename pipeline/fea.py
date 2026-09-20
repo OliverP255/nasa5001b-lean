@@ -37,8 +37,7 @@ IVec3 = tuple[int, int, int]
 class FEAResult:
     """The discrete FEA problem, plus CalculiX's proposed solution.
 
-    Coordinates are integer multiples of COORD_SCALE mm and displacements
-    integer multiples of DISP_SCALE mm.
+    Coordinates are integer multiples of COORD_SCALE mm and displacements are integer multiples of DISP_SCALE mm.
     """
     coords: dict[int, IVec3]
     elements: dict[int, tuple[int, ...]]
@@ -75,7 +74,7 @@ class FEAResult:
                 for n in self.loaded_nodes}
 
     def to_model(self, lame) -> "object":
-        """Wrap this result as a `fem_reference.DiscreteModel`."""
+        """Wrap this result as a fem_reference.DiscreteModel."""
         from .fem_reference import DiscreteModel
         return DiscreteModel(
             coords=self.coords, elems=self.elements, disps=self.disps,
@@ -321,22 +320,22 @@ def _solve(work_dir: Path, tag: str, coords: dict[int, IVec3],
 def run_fea(step_path: Path, geom: BracketGeometry, mat: Material,
             limit_load_n: Fraction, work_dir: Path,
             mesh_size_mm: float, refine: int = 1) -> FEAResult:
-    """Mesh, solve, and return the exact discrete problem with the solver's `u`.
+    """Mesh, solve, and return the exact discrete problem with the solver's u.
 
-    `limit_load_n` is the Limit Load of §3.2, the solve is performed at exactly
+    limit_load_n is the Limit Load of §3.2, the solve is performed at exactly
     this load, because the Margin of Safety is defined in terms of the stress
     at limit load.
 
-    Iterative refinement (`refine` extra solves)
-    --------------------------------------------
+    Iterative refinement (refine extra solves)
+    -------------------------------------------
     CalculiX prints displacements to seven significant figures, which by itself
     leaves a residual of order 1 N, far too coarse to be a meaningful check.
-    So we compute the exact residual `r = K u − f` and ask CalculiX to solve
-    `K δ = −r`, then take `u + δ`.  Because `δ` is small, seven significant
-    figures of `δ` are many more significant figures of `u`, and each pass
+    So we compute the exact residual r = K u − f and ask CalculiX to solve
+    K δ = −r, then take u + δ.  Because δ is small, seven significant
+    figures of δ are many more significant figures of u, and each pass
     reduces the residual by roughly three orders of magnitude.
 
-    This is still only the solver proposing a correction: the refined `u` is no
+    This is still only the solver proposing a correction: the refined u is no
     more trusted than the original, and Lean checks it exactly the same way.
     """
     from . import fem_reference as fr

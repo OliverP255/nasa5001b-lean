@@ -8,7 +8,7 @@ Orchestrator: CAD → mesh → FEA → generated Lean → lake build → axiom a
   python -m pipeline --approach prototype     # prototype verification approach
   python -m pipeline --mesh-size 6            # finer mesh (slower to check)
 
-`--limit-load` is the Limit Load of NASA-STD-5001B §3.2
+--limit-load is the Limit Load of NASA-STD-5001B §3.2
 "the maximum anticipated load ... that a structure may experience during its design service
 life under all expected conditions of operation."  
 
@@ -49,8 +49,8 @@ AXIOM_LEAN = REPO_ROOT / "Scripts" / "Axioms.lean"
 #: to beam theory that each certificate reports.
 DEFAULT_MESH_SIZE_MM = 10.0
 
-#: Axioms a certificate may legitimately depend on.  `ofReduceBool` would mean
-#: `native_decide` crept in, trusting the compiler, `sorryAx` an open goal.
+#: Axioms a certificate may legitimately depend on.  ofReduceBool would mean
+#: native_decide crept in, trusting the compiler, sorryAx an open goal.
 ALLOWED_AXIOMS = {"propext", "Classical.choice", "Quot.sound"}
 BANNED_AXIOMS = {"ofReduceBool", "ofReduceNat", "sorryAx", "Lean.ofReduceBool"}
 
@@ -70,7 +70,7 @@ def _run_lake(args: list[str]) -> subprocess.CompletedProcess:
 def _audit_axioms() -> tuple[bool, str]:
     """Run the axiom audit and check nothing banned appears.
 
-    A certificate that type-checks can still rest on `native_decide`, which
+    A certificate that type-checks can still rest on native_decide, which
     asks the kernel to believe the compiler.  This makes that visible.
     """
     if not AXIOM_LEAN.exists():

@@ -1,9 +1,9 @@
 """
 pipeline/fem_reference.py
 
-An exact-rational mirror of `NasaStd5001B/Fem/*.lean`.
+An exact-rational mirror of NasaStd5001B/Fem/*.lean.
 
-Every function here computes, in Python `Fraction` arithmetic, exactly what the
+Every function here computes, in Python Fraction arithmetic, exactly what the
 corresponding Lean definition computes.  It has two jobs:
 
   1. Choose the constants that go into the certificate, the residual tolerance
@@ -11,11 +11,11 @@ corresponding Lean definition computes.  It has two jobs:
      before Lean does.
   2. Serve as a cross-check: the values it produces must agree with Lean's
      (verified by the pipeline) and its stresses must agree with CalculiX's own
-     (verified by `check_against_solver`).
+     (verified by check_against_solver).
 
 Scaling convention (must match Fem/Types.lean):
-  · node coordinates are integers in units of `cs` mm
-  · nodal displacements are integers in units of `ds` mm
+  · node coordinates are integers in units of cs mm
+  · nodal displacements are integers in units of ds mm
 """
 
 from __future__ import annotations
@@ -210,10 +210,10 @@ def choose_epsilon(exact: Fraction) -> Fraction:
 
 
 def stress_bounds(q: Fraction, grid: int = 1000) -> tuple[Fraction, Fraction]:
-    """Rational σ_lo ≤ √q ≤ σ_hi on a 1/`grid` MPa lattice.
+    """Rational σ_lo ≤ √q ≤ σ_hi on a 1/grid MPa lattice.
 
     ℚ is not closed under square roots, so the certificate compares squares.
-    These bracket the true discrete peak stress to within 1/`grid` MPa.
+    These bracket the true discrete peak stress to within 1/grid MPa.
     """
     if q <= 0:
         return Fraction(0), Fraction(0)
