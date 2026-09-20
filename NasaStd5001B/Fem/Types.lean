@@ -2,13 +2,12 @@
   NasaStd5001B.Fem.Types
 
   Data types for the linear-elastic C3D4 (4-node tetrahedron) finite element
-  model that Lean checks independently of the solver.
+  model that Lean checks independently of the FEA solver.
 
-  Scaling convention
-  ------------------
-  Node coordinates and nodal displacements are stored as *integer-valued*
+  ##Scaling convention:
+  Node coordinates and nodal displacements are stored as integer-valued
   rationals in scaled units, so that every literal in the generated model file
-  is an integer and the kernel never normalises a fraction while reading data:
+  is an integer and the kernel never needs to normalise a fraction:
 
     · coordinates   p are in units of cs mm   (cs = 1/1000 ⇒ micrometres)
     · displacements u are in units of ds mm   (ds = 1/10^9 ⇒ picometres)
@@ -16,9 +15,6 @@
   cs and ds are carried by Model and reintroduced by Fem.Element, which
   works out the true stresses in MPa and the true nodal forces in N.
 
-  All vector operations are plain functions rather than typeclass instances:
-  the kernel has to reduce every one of them during decide +kernel, and
-  direct definitions reduce far more predictably than instance projections.
 -/
 
 import Mathlib.Data.Rat.Lemmas
@@ -74,8 +70,7 @@ structure Material where
   mu  : ℚ
   deriving Repr, DecidableEq
 
-/-- A symmetric 3×3 tensor in Voigt order.  Used for both strain (with
-    *engineering* shear components, γ = 2ε) and stress. -/
+/-- A symmetric 3×3 tensor in Voigt order.  Used for both stress and strain. -/
 structure Sym6 where
   xx : ℚ
   yy : ℚ
@@ -121,7 +116,7 @@ structure NodeCheck where
     and the element states used for the stress recovery.
 
     The material enters through the element states, which are computed from the
-    elements by Elem.rawState, so it is not carried separately here. -/
+    elements by Elem.rawState. -/
 structure Model where
   cs    : ℚ
   ds    : ℚ

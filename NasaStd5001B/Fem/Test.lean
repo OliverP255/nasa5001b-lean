@@ -4,11 +4,8 @@
   Checks on the element formulation itself, against values worked out by hand.
 
   These matter because everything downstream is only as meaningful as the
-  definition of K.  A certificate proving ‖K u − f‖ ≤ ε for the *wrong* K
-  proves nothing about the bracket, and that error would be invisible in the
-  generated file, it would still build.  So the properties a linear-elastic
-  constant-strain tetrahedron must have are pinned down here, on elements
-  small enough to check by hand.
+  definition of K.  So the properties a linear-elastic constant-strain tetrahedron 
+  must have are pinned down here, on elements small enough to check by hand.
 
   tests/test_fem_reference.py checks the same properties on the Python
   mirror of these definitions, including a full multi-element patch test.

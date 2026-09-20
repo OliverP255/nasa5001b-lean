@@ -4,11 +4,11 @@
 
   They fall into two groups:
 
-  A. CONCRETE, facts about the numeric values in Table 1.
+  1. CONCRETE, facts about the numeric values in Table 1.
      Proved by 'decide +kernel' or 'rfl', so they are checked only by the Lean
      kernel itself.
 
-  B. GENERAL, mathematical properties of the Margin of Safety formula
+  2. GENERAL, mathematical properties of the Margin of Safety formula
      and the compliance predicate.  Proved with Mathlib tactics.
 
   Ground truth: NASA-STD-5001B.md in this repository.

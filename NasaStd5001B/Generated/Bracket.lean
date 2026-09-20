@@ -20,15 +20,12 @@
                [129.1970, 129.1980] MPa
   Certified σ: 64599/500 MPa (upper bound, conservative for this verdict)
 
-  Cross-check (NOT part of the proof):
+  Cross-check (not part of the proof):
     CalculiX's own peak von Mises : 129.1979 MPa
     Euler–Bernoulli 6FL/bh²       : 200.0000 MPa  (-35.4%)
-    The gap to beam theory is discretisation error.  Linear tetrahedra
-    are stiff in bending, and this model is outside the proof boundary:
-    see the trusted-inputs table in the README.
 
-  What is proved below is a statement about the *discrete* model, this mesh, these boundary conditions, this material, and not about
-  the physical bracket.
+What is proved below is a statement about the discrete model, this mesh, these boundary conditions, this material, and not about
+the physical bracket.
 -/
 
 import NasaStd5001B.Generated.BracketData
