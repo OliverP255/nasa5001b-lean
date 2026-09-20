@@ -28,9 +28,7 @@ I've formalised the structural analysis tests as in NASA-STD-5001B and verified 
 
 ### 1. Formalising NASA-STD-5001B
 
-I formalised the structural analysis tests in NASA-STD-5001B. This repo focuses on §3.2, Table 1, and §4.2d:
-
-> "The factored stresses shall not exceed material allowable stresses (yield and ultimate) under the expected temperature, pressure, and other operating conditions."
+I formalised the structural analysis tests in NASA-STD-5001B. This repo focuses on §3.2, Table 1, and §4.2d.
 
 `NasaStd5001B/Meta.lean` proves properties of the standard itself, including the main theorem about the correctness of the requirements:
 
